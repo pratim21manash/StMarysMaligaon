@@ -17,7 +17,7 @@ export const schoolInfo = {
   affiliationNo: "1234567",
   address: "Maligaon, Guwahati, Assam - 781011",
   phone: "+91 87520 16092",
-  email: "info@stmarysmaligaon.in",
+  email: "st.marysschool66@yahoo.com",
   principal: "Dr. Meera Sharma",
 };
 
