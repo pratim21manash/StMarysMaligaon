@@ -28,19 +28,19 @@ const TopBar = () => {
             </span>
           </div>
 
-          {/* Right: Affiliation + Login Button (small) */}
+          {/* Right: Affiliation + Login Button */}
           <div className="flex items-center gap-2 sm:gap-3">
             <span className="hidden sm:inline text-gold-300 font-medium tracking-wide text-[9px] sm:text-[10px] whitespace-nowrap">
               Affiliated to {schoolInfo.affiliation} • Est. {schoolInfo.established}
             </span>
 
-            {/* Login Button - Small, compact, at extreme right */}
+            {/* Admin Login Button */}
             <Link
-              to="/login"
-              className="inline-flex items-center gap-1 bg-gold-500 hover:bg-gold-400 text-maroon-900 font-medium px-2 py-0.5 rounded-full transition-all duration-300 text-[8px] sm:text-[9px] shadow-md hover:shadow-lg hover:scale-105"
+              to="/admin/login"
+              className="inline-flex items-center gap-1 bg-gold-500 hover:bg-gold-400 text-maroon-900 font-medium px-3 py-1 rounded-full transition-all duration-300 text-[9px] sm:text-[10px] shadow-md hover:shadow-lg hover:scale-105"
             >
-              <LogIn size={10} className="sm:size-11" />
-              <span className="hidden xs:inline">Login</span>
+              <LogIn size={12} className="sm:size-12" />
+              <span className="hidden xs:inline">Admin Login</span>
               <span className="xs:hidden">Login</span>
             </Link>
           </div>
