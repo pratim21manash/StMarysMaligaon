@@ -459,7 +459,7 @@ The procedure for admission will be provided in the form itself.
             </p>
             <div className="mt-2 flex items-center gap-2 text-xs text-maroon-600 font-medium">
               <Clock size={12} className="text-gold-500" />
-              {/* <span>Hurry! Limited seats available</span> */}
+              <span>Form mwill be available from 24th Aug 2026</span>
             </div>
           </div>
 
