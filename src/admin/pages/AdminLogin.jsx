@@ -118,9 +118,7 @@ const AdminLogin = () => {
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
-            Default: admin@stmarys.edu.in / Admin@123
-          </p>
+          {/* Removed default credentials line */}
         </div>
       </div>
     </div>
