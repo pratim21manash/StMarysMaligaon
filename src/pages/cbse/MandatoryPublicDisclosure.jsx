@@ -22,7 +22,8 @@ import {
   Sparkles,
   Wallet,
   Calendar,
-  Clock
+  Clock,
+  Info
 } from 'lucide-react'
 
 const MandatoryPublicDisclosure = () => {
@@ -62,7 +63,7 @@ const MandatoryPublicDisclosure = () => {
     }))
   }
 
-  // Fee Structure Data
+  // Fee Structure Data - Exact match from image
   const feeData = [
     { 
       class: 'KG', 
@@ -71,37 +72,37 @@ const MandatoryPublicDisclosure = () => {
       installmentPeriod: '3 Months'
     },
     { 
-      class: 'I - III', 
+      class: 'I – III', 
       annualPerInstallment: '₹ 3,630', 
       tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months'
     },
     { 
-      class: 'IV - V', 
+      class: 'IV – V', 
       annualPerInstallment: '₹ 3,640', 
       tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months'
     },
     { 
-      class: 'VI - VIII', 
+      class: 'VI – VIII', 
       annualPerInstallment: '₹ 3,680', 
       tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months'
     },
     { 
-      class: 'IX - X', 
+      class: 'IX – X', 
       annualPerInstallment: '₹ 3,775', 
       tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months'
     },
     { 
-      class: 'XI - XII (Hum/Com)', 
+      class: 'XI – XII (Hum/Com)', 
       annualPerInstallment: '₹ 5,930', 
       tuitionPerInstallment: '₹ 8,800',
       installmentPeriod: '4 Months'
     },
     { 
-      class: 'XI - XII (Science)', 
+      class: 'XI – XII (Science)', 
       annualPerInstallment: '₹ 8,480', 
       tuitionPerInstallment: '₹ 8,800',
       installmentPeriod: '4 Months'
@@ -149,11 +150,6 @@ const MandatoryPublicDisclosure = () => {
       name: 'Water, Health & Sanitation Certificate',
       url: '/wp-content/uploads/2026/05/Health_Hygiene_Certificate.pdf',
       description: 'Valid Water, Health and Sanitation Certificates'
-    },
-    fee: {
-      name: 'Fee Structure',
-      url: '#',
-      description: 'School Fee Structure 2025-26'
     },
     academic: {
       name: 'Annual Academic Calendar',
@@ -305,13 +301,13 @@ const MandatoryPublicDisclosure = () => {
 
   const handleViewPdf = (key) => {
     if (key === 'fee') {
-      // Open Fee Structure modal instead of PDF
+      // Open Fee Structure modal
       setShowFeeStructure(true)
       return
     }
     
     const pdf = pdfData[key]
-    if (pdf && pdf.url && pdf.url !== '#') {
+    if (pdf && pdf.url) {
       setSelectedPdf(pdf)
     }
   }
@@ -505,7 +501,6 @@ const MandatoryPublicDisclosure = () => {
                   </thead>
                   <tbody>
                     {resultInfo.map((item, index) => {
-                      const pdf = pdfData[item.key]
                       const Icon = item.icon
                       return (
                         <tr key={item.label} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50 hover:bg-gray-100/50 transition-colors'}>
@@ -515,17 +510,13 @@ const MandatoryPublicDisclosure = () => {
                             {item.label}
                           </td>
                           <td className="px-4 py-2.5 border-b border-gray-100">
-                            {pdf ? (
-                              <button
-                                onClick={() => handleViewPdf(item.key)}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gold-50 hover:bg-gold-100 text-gold-700 text-xs font-medium rounded-lg transition-all duration-300 hover:shadow-md group"
-                              >
-                                <Eye size={13} className="group-hover:scale-110 transition-transform" />
-                                View More
-                              </button>
-                            ) : (
-                              <span className="text-gray-400 text-xs">Not Available</span>
-                            )}
+                            <button
+                              onClick={() => handleViewPdf(item.key)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gold-50 hover:bg-gold-100 text-gold-700 text-xs font-medium rounded-lg transition-all duration-300 hover:shadow-md group"
+                            >
+                              <Eye size={13} className="group-hover:scale-110 transition-transform" />
+                              View More
+                            </button>
                           </td>
                         </tr>
                       )
@@ -844,7 +835,9 @@ const MandatoryPublicDisclosure = () => {
         </div>
       )}
 
-      {/* Fee Structure Modal */}
+      {/* ========================================================== */}
+      {/* FEE STRUCTURE MODAL - Popup exactly matching the image */}
+      {/* ========================================================== */}
       {showFeeStructure && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
@@ -875,31 +868,24 @@ const MandatoryPublicDisclosure = () => {
             {/* Modal Body */}
             <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                {/* Important Notice */}
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-500 p-3 m-4 rounded-lg">
-                  <p className="text-xs text-amber-800 flex items-center gap-2">
-                    <AlertCircle size={14} className="text-orange-600 flex-shrink-0" />
-                    <span>Fees are received by HDFC Bank Ltd., Maligaon Branch on behalf of the Institution</span>
-                  </p>
-                </div>
-
-                <div className="overflow-x-auto p-4">
+                {/* Fee Table - Exact match from image */}
+                <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gradient-to-r from-maroon-900 to-maroon-700 text-white">
-                        <th className="px-4 py-3 text-left font-semibold text-sm">CLASS</th>
-                        <th className="px-4 py-3 text-center font-semibold text-sm">ANNUAL FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
-                        <th className="px-4 py-3 text-center font-semibold text-sm">TUITION FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
-                        <th className="px-4 py-3 text-center font-semibold text-sm">INSTALLMENT<br/><span className="text-xs font-normal text-gold-300">Period</span></th>
+                        <th className="px-4 py-3.5 text-left font-semibold text-sm">CLASS</th>
+                        <th className="px-4 py-3.5 text-center font-semibold text-sm">ANNUAL FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
+                        <th className="px-4 py-3.5 text-center font-semibold text-sm">TUITION FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
+                        <th className="px-4 py-3.5 text-center font-semibold text-sm">INSTALLMENT<br/><span className="text-xs font-normal text-gold-300">Period</span></th>
                       </tr>
                     </thead>
                     <tbody>
                       {feeData.map((row, index) => (
                         <tr key={row.class} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50 hover:bg-maroon-50/30 transition-colors'}>
-                          <td className="px-4 py-3 font-semibold text-maroon-900 border-b border-gray-100 text-sm">{row.class}</td>
-                          <td className="px-4 py-3 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.annualPerInstallment}</td>
-                          <td className="px-4 py-3 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.tuitionPerInstallment}</td>
-                          <td className="px-4 py-3 text-center border-b border-gray-100 text-sm">
+                          <td className="px-4 py-3.5 font-semibold text-maroon-900 border-b border-gray-100 text-sm">{row.class}</td>
+                          <td className="px-4 py-3.5 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.annualPerInstallment}</td>
+                          <td className="px-4 py-3.5 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.tuitionPerInstallment}</td>
+                          <td className="px-4 py-3.5 text-center border-b border-gray-100 text-sm">
                             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-100 text-gold-800 text-xs font-medium">
                               <Clock size={12} />
                               {row.installmentPeriod}
@@ -911,7 +897,18 @@ const MandatoryPublicDisclosure = () => {
                   </table>
                 </div>
 
-                {/* Installment Schedule */}
+                {/* Important Notice */}
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200 p-3 m-4 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <Info size={16} className="text-orange-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-amber-800">
+                      <span className="font-semibold">Note:</span> Fees are received by HDFC Bank Ltd., Maligaon Branch on behalf of the Institution. 
+                      No bills are issued. Parents/guardians should ensure timely payment.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Installment Schedules */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-gray-100">
                   <div>
                     <h4 className="text-xs font-bold text-maroon-900 mb-2 flex items-center gap-2">
@@ -926,6 +923,10 @@ const MandatoryPublicDisclosure = () => {
                           <span className="text-[10px] bg-gold-100 text-gold-800 px-2 py-0.5 rounded-full">KG - X</span>
                         </div>
                       ))}
+                    </div>
+                    <div className="mt-2 text-xs text-gray-500 bg-amber-50 p-2 rounded-lg border border-amber-200 flex items-center gap-2">
+                      <AlertCircle size={14} className="text-amber-600 flex-shrink-0" />
+                      <span><span className="font-medium text-amber-800">Late Fee:</span> ₹100 on all late payments</span>
                     </div>
                   </div>
                   <div>
@@ -950,7 +951,7 @@ const MandatoryPublicDisclosure = () => {
                   </div>
                 </div>
 
-                {/* Footer Note */}
+                {/* Footer */}
                 <div className="px-4 py-2.5 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between">
                   <p className="text-[10px] text-gray-400 flex items-center gap-1.5">
                     <Info size={12} className="text-gold-500" />
