@@ -299,12 +299,6 @@ const MandatoryPublicDisclosure = () => {
     { name: 'SR. THEKUVELU RHAKHO', designation: 'SPECIAL EDUCATOR', qualification: 'BA.' }
   ]
 
-  // Debug function to check if fee structure button works
-  const handleFeeStructureClick = () => {
-    console.log('Fee Structure button clicked')
-    setShowFeeStructure(true)
-  }
-
   const handleViewPdf = (key) => {
     console.log('View PDF clicked for key:', key)
     
@@ -825,7 +819,7 @@ const MandatoryPublicDisclosure = () => {
       )}
 
       {/* ========================================================== */}
-      {/* FEE STRUCTURE MODAL - With direct button */}
+      {/* FEE STRUCTURE MODAL */}
       {/* ========================================================== */}
       {showFeeStructure && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -991,4 +985,4 @@ const MandatoryPublicDisclosure = () => {
   )
 }
 
-export default MandatoryPublicDisclosures
+export default MandatoryPublicDisclosure
