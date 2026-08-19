@@ -836,7 +836,7 @@ const MandatoryPublicDisclosure = () => {
               <div>
                 <h3 className="font-bold text-white text-lg flex items-center gap-2">
                   <Wallet size={20} className="text-gold-400" />
-                  Fee Structure 2025-26
+                  Fee Structure 2026-27
                 </h3>
                 <p className="text-xs text-gold-300/80 mt-0.5">St. Mary's Sr. Secondary School, Maligaon</p>
               </div>
