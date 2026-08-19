@@ -299,16 +299,27 @@ const MandatoryPublicDisclosure = () => {
     { name: 'SR. THEKUVELU RHAKHO', designation: 'SPECIAL EDUCATOR', qualification: 'BA.' }
   ]
 
+  // Debug function to check if fee structure button works
+  const handleFeeStructureClick = () => {
+    console.log('Fee Structure button clicked')
+    setShowFeeStructure(true)
+  }
+
   const handleViewPdf = (key) => {
+    console.log('View PDF clicked for key:', key)
+    
     if (key === 'fee') {
-      // Open Fee Structure modal
+      console.log('Opening Fee Structure modal')
       setShowFeeStructure(true)
       return
     }
     
     const pdf = pdfData[key]
     if (pdf && pdf.url) {
+      console.log('Opening PDF:', pdf.name)
       setSelectedPdf(pdf)
+    } else {
+      console.log('PDF not found for key:', key)
     }
   }
 
@@ -317,6 +328,7 @@ const MandatoryPublicDisclosure = () => {
   }
 
   const handleCloseFeeStructure = () => {
+    console.log('Closing Fee Structure modal')
     setShowFeeStructure(false)
   }
 
@@ -782,52 +794,29 @@ const MandatoryPublicDisclosure = () => {
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl"
           >
-            {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-maroon-50 to-gold-50 rounded-t-2xl">
               <div>
                 <h3 className="font-bold text-maroon-900 text-base">{selectedPdf.name}</h3>
                 <p className="text-xs text-gray-500 mt-0.5">{selectedPdf.description}</p>
               </div>
-              <button
-                onClick={handleClosePdf}
-                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-              >
+              <button onClick={handleClosePdf} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
                 <X size={20} className="text-gray-600" />
               </button>
             </div>
-
-            {/* Modal Body */}
             <div className="flex-1 p-4 overflow-hidden bg-gray-50">
-              <iframe
-                src={selectedPdf.url}
-                className="w-full h-full rounded-lg border border-gray-200 shadow-inner"
-                title={selectedPdf.name}
-              />
+              <iframe src={selectedPdf.url} className="w-full h-full rounded-lg border border-gray-200 shadow-inner" title={selectedPdf.name} />
             </div>
-
-            {/* Modal Footer */}
             <div className="flex items-center justify-between p-4 border-t bg-gray-50 rounded-b-2xl">
               <span className="text-xs text-gray-500 flex items-center gap-1.5">
                 <FileCheck size={14} className="text-green-600" />
                 PDF Document
               </span>
               <div className="flex gap-3">
-                <a
-                  href={selectedPdf.url}
-                  download
-                  className="px-4 py-2 bg-maroon-800 text-white rounded-lg text-sm font-medium hover:bg-maroon-700 transition-all duration-300 flex items-center gap-2 hover:shadow-lg"
-                >
-                  <Download size={15} />
-                  Download
+                <a href={selectedPdf.url} download className="px-4 py-2 bg-maroon-800 text-white rounded-lg text-sm font-medium hover:bg-maroon-700 transition-all duration-300 flex items-center gap-2 hover:shadow-lg">
+                  <Download size={15} /> Download
                 </a>
-                <a
-                  href={selectedPdf.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-gold-600 text-white rounded-lg text-sm font-medium hover:bg-gold-700 transition-all duration-300 flex items-center gap-2 hover:shadow-lg"
-                >
-                  <ExternalLink size={15} />
-                  Open in New Tab
+                <a href={selectedPdf.url} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gold-600 text-white rounded-lg text-sm font-medium hover:bg-gold-700 transition-all duration-300 flex items-center gap-2 hover:shadow-lg">
+                  <ExternalLink size={15} /> Open in New Tab
                 </a>
               </div>
             </div>
@@ -836,7 +825,7 @@ const MandatoryPublicDisclosure = () => {
       )}
 
       {/* ========================================================== */}
-      {/* FEE STRUCTURE MODAL - Popup exactly matching the image */}
+      {/* FEE STRUCTURE MODAL - With direct button */}
       {/* ========================================================== */}
       {showFeeStructure && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1002,4 +991,4 @@ const MandatoryPublicDisclosure = () => {
   )
 }
 
-export default MandatoryPublicDisclosure
+export default MandatoryPublicDisclosures
