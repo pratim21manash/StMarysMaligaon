@@ -6,14 +6,12 @@ import {
   Clock, 
   AlertCircle, 
   Banknote, 
-  CreditCard, 
   Info,
   Sparkles,
   Shield,
-  TrendingUp,
-  Building,
   Phone,
-  Mail
+  Building,
+  CreditCard
 } from 'lucide-react'
 
 const Fees = () => {
@@ -44,53 +42,54 @@ const Fees = () => {
     }
   }
 
+  // Updated fee data from the image
   const feeData = [
     { 
       class: 'KG', 
-      annualPerInstallment: '₹ 8,820', 
+      annualPerInstallment: '₹ 9,150', 
       tuitionPerInstallment: '—',
       installmentPeriod: '3 Months',
       colour: 'purple'
     },
     { 
       class: 'I - III', 
-      annualPerInstallment: '₹ 3,605', 
-      tuitionPerInstallment: '₹ 6,000',
+      annualPerInstallment: '₹ 3,630', 
+      tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months',
       colour: 'blue'
     },
     { 
       class: 'IV - V', 
-      annualPerInstallment: '₹ 3,615', 
-      tuitionPerInstallment: '₹ 6,000',
+      annualPerInstallment: '₹ 3,640', 
+      tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months',
       colour: 'teal'
     },
     { 
       class: 'VI - VIII', 
-      annualPerInstallment: '₹ 3,655', 
-      tuitionPerInstallment: '₹ 6,000',
+      annualPerInstallment: '₹ 3,680', 
+      tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months',
       colour: 'green'
     },
     { 
       class: 'IX - X', 
-      annualPerInstallment: '₹ 3,750', 
-      tuitionPerInstallment: '₹ 6,000',
+      annualPerInstallment: '₹ 3,775', 
+      tuitionPerInstallment: '₹ 6,300',
       installmentPeriod: '3 Months',
       colour: 'amber'
     },
     { 
       class: 'XI - XII (Hum/Com)', 
-      annualPerInstallment: '₹ 5,890', 
-      tuitionPerInstallment: '₹ 8,400',
+      annualPerInstallment: '₹ 5,930', 
+      tuitionPerInstallment: '₹ 8,800',
       installmentPeriod: '4 Months',
       colour: 'orange'
     },
     { 
       class: 'XI - XII (Science)', 
-      annualPerInstallment: '₹ 8,390', 
-      tuitionPerInstallment: '₹ 8,400',
+      annualPerInstallment: '₹ 8,480', 
+      tuitionPerInstallment: '₹ 8,800',
       installmentPeriod: '4 Months',
       colour: 'rose'
     }
@@ -347,10 +346,10 @@ const Fees = () => {
             >
               <div className="flex justify-center mb-2">
                 <div className="p-2.5 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors">
-                  <Banknote size={20} className="text-blue-600" />
+                  <Building size={20} className="text-blue-600" />
                 </div>
               </div>
-              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Payment Mode</h4>
+              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Bank</h4>
               <p className="text-sm font-medium text-gray-700 mt-1">HDFC Bank Ltd.</p>
               <p className="text-xs text-gray-500">Maligaon Branch, Guwahati</p>
             </motion.div>
@@ -361,12 +360,12 @@ const Fees = () => {
             >
               <div className="flex justify-center mb-2">
                 <div className="p-2.5 rounded-full bg-green-100 group-hover:bg-green-200 transition-colors">
-                  <Calendar size={20} className="text-green-600" />
+                  <CreditCard size={20} className="text-green-600" />
                 </div>
               </div>
-              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Payment Period</h4>
-              <p className="text-sm font-medium text-gray-700 mt-1">10th - 20th</p>
-              <p className="text-xs text-gray-500">April, July, October & January</p>
+              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Payment Mode</h4>
+              <p className="text-sm font-medium text-gray-700 mt-1">Bank Deposit</p>
+              <p className="text-xs text-gray-500">On behalf of the Institution</p>
             </motion.div>
 
             <motion.div 
@@ -378,9 +377,9 @@ const Fees = () => {
                   <AlertCircle size={20} className="text-red-600" />
                 </div>
               </div>
-              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Result Withholding</h4>
-              <p className="text-sm font-medium text-gray-700 mt-1">Results withheld</p>
-              <p className="text-xs text-gray-500">For students with pending dues</p>
+              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Late Fee</h4>
+              <p className="text-sm font-medium text-gray-700 mt-1">₹ 100</p>
+              <p className="text-xs text-gray-500">Levied on all late payments</p>
             </motion.div>
           </motion.div>
 

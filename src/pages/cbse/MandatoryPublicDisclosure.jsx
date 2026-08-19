@@ -19,11 +19,15 @@ import {
   CheckCircle,
   FileCheck,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Wallet,
+  Calendar,
+  Clock
 } from 'lucide-react'
 
 const MandatoryPublicDisclosure = () => {
   const [selectedPdf, setSelectedPdf] = useState(null)
+  const [showFeeStructure, setShowFeeStructure] = useState(false)
   const [expandedSections, setExpandedSections] = useState({
     general: true,
     documents: true,
@@ -58,57 +62,120 @@ const MandatoryPublicDisclosure = () => {
     }))
   }
 
-  // PDF data with actual file paths - update these with your actual PDF URLs
- // PDF data with actual file paths
-const pdfData = {
-  affiliation: {
-    name: 'Affiliation/Upgradation Letter',
-    url: '/wp-content/uploads/2026/05/Affiliation_Certificate.pdf',
-    description: 'CBSE Affiliation Letter and Recent Extension'
-  },
+  // Fee Structure Data
+  const feeData = [
+    { 
+      class: 'KG', 
+      annualPerInstallment: '₹ 9,150', 
+      tuitionPerInstallment: '—',
+      installmentPeriod: '3 Months'
+    },
+    { 
+      class: 'I - III', 
+      annualPerInstallment: '₹ 3,630', 
+      tuitionPerInstallment: '₹ 6,300',
+      installmentPeriod: '3 Months'
+    },
+    { 
+      class: 'IV - V', 
+      annualPerInstallment: '₹ 3,640', 
+      tuitionPerInstallment: '₹ 6,300',
+      installmentPeriod: '3 Months'
+    },
+    { 
+      class: 'VI - VIII', 
+      annualPerInstallment: '₹ 3,680', 
+      tuitionPerInstallment: '₹ 6,300',
+      installmentPeriod: '3 Months'
+    },
+    { 
+      class: 'IX - X', 
+      annualPerInstallment: '₹ 3,775', 
+      tuitionPerInstallment: '₹ 6,300',
+      installmentPeriod: '3 Months'
+    },
+    { 
+      class: 'XI - XII (Hum/Com)', 
+      annualPerInstallment: '₹ 5,930', 
+      tuitionPerInstallment: '₹ 8,800',
+      installmentPeriod: '4 Months'
+    },
+    { 
+      class: 'XI - XII (Science)', 
+      annualPerInstallment: '₹ 8,480', 
+      tuitionPerInstallment: '₹ 8,800',
+      installmentPeriod: '4 Months'
+    }
+  ]
 
-  society: {
-    name: 'Society/Trust Registration',
-    url: '/wp-content/uploads/2026/05/Society_Certificate.pdf',
-    description: 'Society/Trust/Company Registration Certificate'
-  },
-
-  noc: {
-    name: 'NOC Certificate',
-    url: '/wp-content/uploads/2026/05/NOC.pdf',
-    description: 'No Objection Certificate from State Govt./UT'
-  },
-
-  rte: {
-    name: 'RTE Recognition Certificate',
-    url: '/wp-content/uploads/2026/05/Recognition_Certificate_10.pdf',
-    description: 'Recognition Certificate under RTE Act, 2009'
-  },
-
-  building: {
-    name: 'Building Safety Certificate',
-    url: '/wp-content/uploads/2026/05/Building_Safety_Certificate.pdf',
-    description: 'Valid Building Safety Certificate as per National Building Code'
-  },
-
-  fire: {
-    name: 'Fire Safety Certificate',
-    url: '/wp-content/uploads/2026/05/Fire_Safety_Certificate.pdf',
-    description: 'Valid Fire Safety Certificate from Competent Authority'
-  },
-
-  deo: {
-    name: 'DEO Certificate',
-    url: '/wp-content/uploads/2026/05/Self_Certification.pdf',
-    description: 'DEO Certificate submitted for Affiliation/Upgradation/Extension'
-  },
-
-  water: {
-    name: 'Water, Health & Sanitation Certificate',
-    url: '/wp-content/uploads/2026/05/Health_Hygiene_Certificate.pdf',
-    description: 'Valid Water, Health and Sanitation Certificates'
+  // PDF data with actual file paths
+  const pdfData = {
+    affiliation: {
+      name: 'Affiliation/Upgradation Letter',
+      url: '/wp-content/uploads/2026/05/Affiliation_Certificate.pdf',
+      description: 'CBSE Affiliation Letter and Recent Extension'
+    },
+    society: {
+      name: 'Society/Trust Registration',
+      url: '/wp-content/uploads/2026/05/Society_Certificate.pdf',
+      description: 'Society/Trust/Company Registration Certificate'
+    },
+    noc: {
+      name: 'NOC Certificate',
+      url: '/wp-content/uploads/2026/05/NOC.pdf',
+      description: 'No Objection Certificate from State Govt./UT'
+    },
+    rte: {
+      name: 'RTE Recognition Certificate',
+      url: '/wp-content/uploads/2026/05/Recognition_Certificate_10.pdf',
+      description: 'Recognition Certificate under RTE Act, 2009'
+    },
+    building: {
+      name: 'Building Safety Certificate',
+      url: '/wp-content/uploads/2026/05/Building_Safety_Certificate.pdf',
+      description: 'Valid Building Safety Certificate as per National Building Code'
+    },
+    fire: {
+      name: 'Fire Safety Certificate',
+      url: '/wp-content/uploads/2026/05/Fire_Safety_Certificate.pdf',
+      description: 'Valid Fire Safety Certificate from Competent Authority'
+    },
+    deo: {
+      name: 'DEO Certificate',
+      url: '/wp-content/uploads/2026/05/Self_Certification.pdf',
+      description: 'DEO Certificate submitted for Affiliation/Upgradation/Extension'
+    },
+    water: {
+      name: 'Water, Health & Sanitation Certificate',
+      url: '/wp-content/uploads/2026/05/Health_Hygiene_Certificate.pdf',
+      description: 'Valid Water, Health and Sanitation Certificates'
+    },
+    fee: {
+      name: 'Fee Structure',
+      url: '#',
+      description: 'School Fee Structure 2025-26'
+    },
+    academic: {
+      name: 'Annual Academic Calendar',
+      url: '/wp-content/uploads/2026/05/Academic_Calendar_2025-26.pdf',
+      description: 'Academic Calendar 2025-26'
+    },
+    smc: {
+      name: 'List of School Management Committee',
+      url: '/wp-content/uploads/2026/05/Managing-Committee.pdf',
+      description: 'School Management Committee Members'
+    },
+    pta: {
+      name: 'List of Parents Teachers Association',
+      url: '/wp-content/uploads/2026/05/Parent-Teacher-Association.pdf',
+      description: 'PTA Members List'
+    },
+    results: {
+      name: 'Last Three-Year Board Results',
+      url: '/wp-content/uploads/2026/05/Board_Result.pdf',
+      description: 'Board Examination Results'
+    }
   }
-}
 
   const generalInfo = [
     { label: 'Name of the School', value: 'ST. MARYS SR. SEC. SCHOOL MALIGAON GUWAHATI' },
@@ -133,7 +200,7 @@ const pdfData = {
   ]
 
   const resultInfo = [
-    { label: 'Fee Structure of the School', key: 'fee', icon: FileText },
+    { label: 'Fee Structure of the School', key: 'fee', icon: Wallet },
     { label: 'Annual Academic Calendar', key: 'academic', icon: BookOpen },
     { label: 'List of School Management Committee (SMC)', key: 'smc', icon: Users },
     { label: 'List of Parents Teachers Association (PTA) Members', key: 'pta', icon: Users },
@@ -237,14 +304,24 @@ const pdfData = {
   ]
 
   const handleViewPdf = (key) => {
+    if (key === 'fee') {
+      // Open Fee Structure modal instead of PDF
+      setShowFeeStructure(true)
+      return
+    }
+    
     const pdf = pdfData[key]
-    if (pdf && pdf.url) {
+    if (pdf && pdf.url && pdf.url !== '#') {
       setSelectedPdf(pdf)
     }
   }
 
   const handleClosePdf = () => {
     setSelectedPdf(null)
+  }
+
+  const handleCloseFeeStructure = () => {
+    setShowFeeStructure(false)
   }
 
   const SectionHeader = ({ title, icon: Icon, section, children }) => {
@@ -292,7 +369,7 @@ const pdfData = {
     <div className="bg-gradient-to-b from-white to-[#FBF6EC] min-h-screen">
       
       {/* ========================================================== */}
-      {/* COMPACT HERO HEADER - Same style as Co-Founders */}
+      {/* COMPACT HERO HEADER */}
       {/* ========================================================== */}
       <div className="bg-maroon-900 text-white py-8 px-4">
         <div className="container-custom mx-auto">
@@ -762,6 +839,136 @@ const pdfData = {
                   Open in New Tab
                 </a>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Fee Structure Modal */}
+      {showFeeStructure && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-maroon-800 to-maroon-700 rounded-t-2xl">
+              <div>
+                <h3 className="font-bold text-white text-lg flex items-center gap-2">
+                  <Wallet size={20} className="text-gold-400" />
+                  Fee Structure 2025-26
+                </h3>
+                <p className="text-xs text-gold-300/80 mt-0.5">St. Mary's Sr. Secondary School, Maligaon</p>
+              </div>
+              <button
+                onClick={handleCloseFeeStructure}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/70 hover:text-white"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                {/* Important Notice */}
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-500 p-3 m-4 rounded-lg">
+                  <p className="text-xs text-amber-800 flex items-center gap-2">
+                    <AlertCircle size={14} className="text-orange-600 flex-shrink-0" />
+                    <span>Fees are received by HDFC Bank Ltd., Maligaon Branch on behalf of the Institution</span>
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto p-4">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-maroon-900 to-maroon-700 text-white">
+                        <th className="px-4 py-3 text-left font-semibold text-sm">CLASS</th>
+                        <th className="px-4 py-3 text-center font-semibold text-sm">ANNUAL FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
+                        <th className="px-4 py-3 text-center font-semibold text-sm">TUITION FEES<br/><span className="text-xs font-normal text-gold-300">(Per Installment)</span></th>
+                        <th className="px-4 py-3 text-center font-semibold text-sm">INSTALLMENT<br/><span className="text-xs font-normal text-gold-300">Period</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {feeData.map((row, index) => (
+                        <tr key={row.class} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50 hover:bg-maroon-50/30 transition-colors'}>
+                          <td className="px-4 py-3 font-semibold text-maroon-900 border-b border-gray-100 text-sm">{row.class}</td>
+                          <td className="px-4 py-3 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.annualPerInstallment}</td>
+                          <td className="px-4 py-3 text-center text-gray-700 border-b border-gray-100 text-sm font-medium">{row.tuitionPerInstallment}</td>
+                          <td className="px-4 py-3 text-center border-b border-gray-100 text-sm">
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-100 text-gold-800 text-xs font-medium">
+                              <Clock size={12} />
+                              {row.installmentPeriod}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Installment Schedule */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-gray-100">
+                  <div>
+                    <h4 className="text-xs font-bold text-maroon-900 mb-2 flex items-center gap-2">
+                      <Calendar size={14} className="text-blue-600" />
+                      Installment Schedule (KG - X)
+                    </h4>
+                    <div className="space-y-1.5">
+                      {['April', 'July', 'October', 'January'].map((month) => (
+                        <div key={month} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100 text-xs">
+                          <span className="font-semibold text-maroon-800">{month}</span>
+                          <span className="text-gray-600">10th - 20th</span>
+                          <span className="text-[10px] bg-gold-100 text-gold-800 px-2 py-0.5 rounded-full">KG - X</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-maroon-900 mb-2 flex items-center gap-2">
+                      <Calendar size={14} className="text-purple-600" />
+                      Installment Schedule (XI - XII)
+                    </h4>
+                    <div className="space-y-1.5">
+                      {['June', 'September', 'December'].map((month) => (
+                        <div key={month} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100 text-xs">
+                          <span className="font-semibold text-maroon-800">{month}</span>
+                          <span className="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">XI - XII</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 p-2 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+                      <p className="text-[10px] text-gray-700 flex items-start gap-1.5">
+                        <Sparkles size={12} className="text-purple-600 flex-shrink-0 mt-0.5" />
+                        <span><span className="font-semibold text-purple-800">Note:</span> Science stream annual fees are higher due to additional laboratory resources</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Note */}
+                <div className="px-4 py-2.5 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between">
+                  <p className="text-[10px] text-gray-400 flex items-center gap-1.5">
+                    <Info size={12} className="text-gold-500" />
+                    Fees cover twelve calendar months
+                  </p>
+                  <p className="text-[10px] text-gray-400">Updated: 2025-26</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-end p-4 border-t bg-gray-50 rounded-b-2xl">
+              <button
+                onClick={handleCloseFeeStructure}
+                className="px-5 py-2 bg-maroon-800 text-white rounded-lg text-sm font-medium hover:bg-maroon-700 transition-all duration-300 hover:shadow-lg"
+              >
+                Close
+              </button>
             </div>
           </motion.div>
         </div>
