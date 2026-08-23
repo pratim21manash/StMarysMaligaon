@@ -354,6 +354,7 @@
 
 // src/components/home/CircularsPanel.jsx
 import React, { useState, useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import { Bell, Calendar, Clock, X, Download, FileText, ArrowRight, Sparkles, AlertCircle, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
@@ -447,6 +448,107 @@ The procedure for admission will be provided in the form itself.
 
   const primaryCircular = circulars.find(c => c.isPrimary)
   const otherCirculars = circulars.filter(c => !c.isPrimary)
+
+  // Modal Component rendered via Portal
+  const ModalComponent = () => {
+    if (!isModalOpen || !selectedCircular) return null
+
+    return ReactDOM.createPortal(
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        onClick={closeModal}
+      >
+        <motion.div
+          initial={{ scale: 0.9, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.9, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative border-t-4 border-gold-500"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Glow Border */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-2xl opacity-30 blur-lg animate-border-flow pointer-events-none" />
+
+          {/* Modal Header */}
+          <div className="relative sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
+            <div className="relative flex items-center gap-2">
+              <Bell size={20} className="text-gold-400" />
+              <h3 className="text-white font-bold text-lg">
+                {selectedCircular.isPrimary ? '📋 Application Form' : '📢 Notice'}
+              </h3>
+            </div>
+            <button
+              onClick={closeModal}
+              className="relative text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full p-1.5"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Modal Body - White Background, Black Text */}
+          <div className="relative p-6 space-y-4 bg-white">
+            {selectedCircular.isPrimary && (
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg shadow-gold-500/30">
+                  <Sparkles size={12} className="animate-sparkle-icon" />
+                  ADMISSION OPEN
+                </span>
+                <span className="px-3 py-1 bg-maroon-700 text-gold-300 text-xs font-bold rounded-full border border-gold-400/30">
+                  2027-28
+                </span>
+              </div>
+            )}
+            <h4 className="text-xl font-bold text-black">{selectedCircular.title}</h4>
+            <p className="text-sm font-semibold text-gold-600">{selectedCircular.subtitle}</p>
+
+            <div className="flex items-center gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <span className="flex items-center gap-1.5">
+                <Calendar size={16} className="text-gold-500" />
+                <span className="text-black">{formatDateFull(selectedCircular.date)}</span>
+              </span>
+            </div>
+
+            {selectedCircular.description && (
+              <div className="border-t border-gray-200 pt-4">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <p className="text-black text-sm leading-relaxed whitespace-pre-line">
+                    {selectedCircular.description}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2 pt-2">
+              {selectedCircular.pdf && (
+                <button
+                  onClick={() => handleDownloadPDF(selectedCircular.pdf)}
+                  className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/40 transition-all duration-300 flex items-center justify-center gap-2 group"
+                >
+                  <Download size={18} className="text-gold-400 group-hover:scale-110 transition-transform" />
+                  {selectedCircular.isPrimary ? 'Download Application Form (PDF)' : 'Download Notice (PDF)'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div className="px-6 py-3 bg-gray-50 border-t border-gray-200 rounded-b-2xl flex justify-end">
+            <button
+              onClick={closeModal}
+              className="px-5 py-2 text-sm font-medium text-gray-600 hover:text-black transition-colors hover:bg-gray-100 rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>,
+      document.body
+    )
+  }
 
   return (
     <>
@@ -637,105 +739,8 @@ The procedure for admission will be provided in the form itself.
         </div>
       </div>
 
-      {/* ========================================================== */}
-      {/* MODAL - Premium (Above everything) */}
-      {/* ========================================================== */}
-      <AnimatePresence>
-        {isModalOpen && selectedCircular && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={closeModal}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative border-t-4 border-gold-500 z-[999]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Glow Border */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-2xl opacity-30 blur-lg animate-border-flow pointer-events-none z-[-1]" />
-
-              {/* Modal Header */}
-              <div className="relative sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
-                <div className="relative flex items-center gap-2">
-                  <Bell size={20} className="text-gold-400" />
-                  <h3 className="text-white font-bold text-lg">
-                    {selectedCircular.isPrimary ? '📋 Application Form' : '📢 Notice'}
-                  </h3>
-                </div>
-                <button
-                  onClick={closeModal}
-                  className="relative text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full p-1.5"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-
-              {/* Modal Body */}
-              <div className="relative p-6 space-y-4 z-10">
-                {selectedCircular.isPrimary && (
-                  <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg shadow-gold-500/30">
-                      <Sparkles size={12} className="animate-sparkle-icon" />
-                      ADMISSION OPEN
-                    </span>
-                    <span className="px-3 py-1 bg-maroon-700 text-gold-300 text-xs font-bold rounded-full border border-gold-400/30">
-                      2027-28
-                    </span>
-                  </div>
-                )}
-                <h4 className="text-xl font-bold text-maroon-900">{selectedCircular.title}</h4>
-                <p className="text-sm font-semibold text-gold-600">{selectedCircular.subtitle}</p>
-
-                <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
-                  <span className="flex items-center gap-1.5">
-                    <Calendar size={16} className="text-gold-500" />
-                    {formatDateFull(selectedCircular.date)}
-                  </span>
-                </div>
-
-                {selectedCircular.description && (
-                  <div className="border-t border-maroon-100 pt-4">
-                    <div className="bg-maroon-50/50 p-4 rounded-lg border border-maroon-100">
-                      <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                        {selectedCircular.description}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2 pt-2">
-                  {selectedCircular.pdf && (
-                    <button
-                      onClick={() => handleDownloadPDF(selectedCircular.pdf)}
-                      className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/40 transition-all duration-300 flex items-center justify-center gap-2 group"
-                    >
-                      <Download size={18} className="text-gold-400 group-hover:scale-110 transition-transform" />
-                      {selectedCircular.isPrimary ? 'Download Application Form (PDF)' : 'Download Notice (PDF)'}
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="px-6 py-3 bg-maroon-50/80 border-t border-maroon-100 rounded-b-2xl flex justify-end">
-                <button
-                  onClick={closeModal}
-                  className="px-5 py-2 text-sm font-medium text-gray-600 hover:text-maroon-800 transition-colors hover:bg-maroon-100 rounded-lg"
-                >
-                  Close
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ===== MODAL - RENDERED AT ROOT LEVEL VIA PORTAL ===== */}
+      <ModalComponent />
 
       {/* ========================================================== */}
       {/* CSS ANIMATIONS */}
@@ -900,4 +905,3 @@ The procedure for admission will be provided in the form itself.
 
 export default CircularsPanel
 
-        
