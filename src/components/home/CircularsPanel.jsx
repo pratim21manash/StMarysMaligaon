@@ -353,29 +353,56 @@
 
 
 // src/components/home/CircularsPanel.jsx
-
 import React, { useState } from 'react'
-import { Bell, Calendar, Clock, X, Download, FileText, Phone, ArrowRight } from 'lucide-react'
+import { Bell, Calendar, Clock, X, Download, FileText, Phone, ArrowRight, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
 
 const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCircular, setSelectedCircular] = useState(null)
 
-  // Static circular data - Admission Notice
-  const circular = {
-    id: 1,
-    title: '📢 ADMISSION NOTICE 2027',
-    subtitle: 'Class K.G. 2027 Admissions Open',
-    description: `The application form for admission to Class K.G. 2027 can be downloaded from the school website between 24th August 2026, 8:00 a.m. to 6th September 2026, 8:00 p.m.
+  // Static circulars data
+  const circulars = [
+    {
+      id: 1,
+      title: '📄 APPLICATION FORM FOR KG ADMISSION 2027-2028',
+      subtitle: 'Apply Now for Class K.G. 2027-28',
+      description: `The application form for admission to Class K.G. 2027-28 is now available for download. 
+
+📅 Last Date to Submit: 6th September 2026, 8:00 PM
+
+Important Instructions:
+• Fill the form completely and accurately.
+• Attach required documents (Birth Certificate, Aadhar, etc.)
+• Submit the form at the school office or via email.
+• For any queries, contact the admission office.
+
+Download the form below and start your child's journey with St. Mary's!`,
+      date: '2026-08-20',
+      time: '08:00:00',
+      pdf: '/wp-content/uploads/2026/05/KG_APPLICATION_FORM-2027-28.pdf',
+      isPrimary: true,
+      badge: '🔥 NEW',
+      badgeColor: 'bg-red-500'
+    },
+    {
+      id: 2,
+      title: '📢 ADMISSION NOTICE 2027',
+      subtitle: 'Class K.G. 2027 Admissions Open',
+      description: `The application form for admission to Class K.G. 2027 can be downloaded from the school website between 24th August 2026, 8:00 a.m. to 6th September 2026, 8:00 p.m.
 
 The procedure for admission will be provided in the form itself.
 
 📅 Last Date: 6th September 2026, 8:00 PM`,
-    date: '2026-08-17',
-    time: '10:00:00',
-    pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf'
-  }
+      date: '2026-08-17',
+      time: '10:00:00',
+      pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf',
+      isPrimary: false,
+      badge: '📌 Notice',
+      badgeColor: 'bg-gold-500'
+    }
+  ]
 
   const formatDateWithTime = (dateStr, timeStr) => {
     if (!dateStr) return ''
@@ -395,21 +422,27 @@ The procedure for admission will be provided in the form itself.
     return `${day}/${month}/${year}`
   }
 
-  const handleCircularClick = () => {
+  const handleCircularClick = (circular) => {
+    setSelectedCircular(circular)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
+    setSelectedCircular(null)
   }
 
-  const handleDownloadPDF = () => {
-    window.open(circular.pdf, '_blank')
+  const handleDownloadPDF = (pdfUrl) => {
+    window.open(pdfUrl, '_blank')
   }
 
   const handleEnquireNow = () => {
     window.location.href = '/contact-us'
   }
+
+  // Get the primary notice (first one with isPrimary: true)
+  const primaryCircular = circulars.find(c => c.isPrimary)
+  const otherCirculars = circulars.filter(c => !c.isPrimary)
 
   return (
     <>
@@ -420,9 +453,9 @@ The procedure for admission will be provided in the form itself.
             <Bell size={20} className="text-gold-400" />
           </div>
           <h3 className="text-white font-bold text-sm tracking-wide flex items-center gap-2">
-            🔔 Important Notice
+            🔔 Important Notices
             <span className="text-[10px] bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded-full animate-pulse border border-gold-400/30">
-              New
+              {circulars.length} New
             </span>
           </h3>
           <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-2.5 py-0.5 rounded-full animate-pulse border border-gold-400/30">
@@ -431,80 +464,119 @@ The procedure for admission will be provided in the form itself.
         </div>
 
         {/* Main Content - Full height notice */}
-        <div className="flex-1 flex flex-col p-4 space-y-3 bg-gradient-to-b from-maroon-50/30 to-white">
-          {/* Notice Badge */}
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-              🔥 ADMISSION OPEN
-            </span>
-            <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-              2027-28
-            </span>
-          </div>
+        <div className="flex-1 flex flex-col p-4 space-y-3 bg-gradient-to-b from-maroon-50/30 to-white overflow-y-auto">
+          
+          {/* ===================== PRIMARY NOTICE ===================== */}
+          {primaryCircular && (
+            <div className="relative bg-gradient-to-br from-maroon-50 via-gold-50/30 to-white rounded-xl border-2 border-gold-400 shadow-lg shadow-gold-200/50 p-4 animate-pulse-glow">
+              {/* Glowing border effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-xl opacity-30 blur-md animate-pulse" />
+              <div className="relative">
+                {/* Badge */}
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full animate-pulse">
+                    🔥 NEW
+                  </span>
+                  <span className="px-3 py-1 bg-gold-500 text-maroon-900 text-xs font-bold rounded-full">
+                    ⭐ HIGHLIGHT
+                  </span>
+                </div>
 
-          {/* Title */}
-          <div className="space-y-1">
-            <h4 className="text-lg font-bold text-maroon-900 leading-tight">
-              Admission Notice for Class K.G. 2027
-            </h4>
-            <p className="text-sm font-semibold text-gold-600">
-              📅 Last Date: 6th September 2026, 8:00 PM
-            </p>
-          </div>
+                {/* Title */}
+                <div className="space-y-1">
+                  <h4 className="text-base font-bold text-maroon-900 leading-tight">
+                    {primaryCircular.title}
+                  </h4>
+                  <p className="text-sm font-semibold text-gold-600 flex items-center gap-2">
+                    <Sparkles size={14} className="text-gold-500 animate-pulse" />
+                    {primaryCircular.subtitle}
+                  </p>
+                </div>
 
-          {/* Description - Short preview */}
-          <div className="bg-white/80 rounded-lg p-3 border border-maroon-100 shadow-inner flex-1">
-            <p className="text-xs text-gray-700 leading-relaxed line-clamp-4">
-              The application form for admission to Class K.G. 2027 can be downloaded from the school website between 24th August 2026, 8:00 a.m. to 6th September 2026, 8:00 p.m.
-            </p>
-            <div className="mt-2 flex items-center gap-2 text-xs text-maroon-600 font-medium">
-              <Clock size={12} className="text-gold-500" />
-              <span>Form will be available from 24th Aug 2026</span>
+                {/* Description preview */}
+                <div className="mt-2 bg-white/70 rounded-lg p-2 border border-gold-200 shadow-inner">
+                  <p className="text-xs text-gray-700 leading-relaxed line-clamp-2">
+                    {primaryCircular.description.split('\n')[0]}
+                  </p>
+                  <p className="text-xs font-semibold text-maroon-700 mt-1 flex items-center gap-1">
+                    <span className="text-[10px] animate-pulse text-gold-500">📅</span>
+                    Last Date: 6th September 2026
+                  </p>
+                </div>
+
+                {/* Action buttons */}
+                <div className="space-y-2 mt-3">
+                  <button
+                    onClick={() => handleCircularClick(primaryCircular)}
+                    className="w-full py-2 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2 group"
+                  >
+                    <FileText size={16} />
+                    View Full Details
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleDownloadPDF(primaryCircular.pdf)}
+                      className="flex-1 py-2 bg-gold-500 hover:bg-gold-600 text-maroon-900 font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-1"
+                    >
+                      <Download size={14} />
+                      Download Form
+                    </button>
+                    <button
+                      onClick={handleEnquireNow}
+                      className="flex-1 py-2 bg-maroon-50 hover:bg-maroon-100 text-maroon-800 font-medium rounded-lg transition-colors text-sm border border-maroon-200 flex items-center justify-center gap-1"
+                    >
+                      <Phone size={14} />
+                      Enquire
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Action Buttons - Full width */}
-          <div className="space-y-2 mt-auto">
-            {/* Enquire Now Button - Primary CTA */}
-            <button
-              onClick={handleEnquireNow}
-              className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2 group"
+          {/* ===================== OTHER NOTICES ===================== */}
+          {otherCirculars.map((circular) => (
+            <div
+              key={circular.id}
+              className="bg-white/80 rounded-lg border border-maroon-100 shadow-sm p-3 hover:shadow-md transition-all duration-300 cursor-pointer"
+              onClick={() => handleCircularClick(circular)}
             >
-              <Phone size={18} className="text-gold-400" />
-              Enquire Now
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            {/* View Details & Download */}
-            <div className="flex gap-2">
-              <button
-                onClick={handleCircularClick}
-                className="flex-1 py-2.5 bg-maroon-50 hover:bg-maroon-100 text-maroon-800 font-medium rounded-lg transition-colors text-sm border border-maroon-200"
-              >
-                View Details
-              </button>
-              <button
-                onClick={handleDownloadPDF}
-                className="flex-1 py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-1"
-              >
-                <Download size={14} />
-                Download PDF
-              </button>
+              <div className="flex items-start gap-2">
+                <div className="w-8 h-8 rounded-lg bg-maroon-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Bell size={14} className="text-maroon-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 line-clamp-1">
+                    {circular.title}
+                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${circular.badgeColor} text-white`}>
+                      {circular.badge}
+                    </span>
+                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <Calendar size={11} />
+                      {formatDateOnly(circular.date)}
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight size={14} className="text-gray-300 flex-shrink-0 mt-1" />
+              </div>
             </div>
-          </div>
-        </div>
+          ))}
 
-        {/* Footer */}
-        <div className="bg-maroon-50 px-4 py-2 border-t border-maroon-100 flex-shrink-0">
-          <p className="text-[10px] text-maroon-600 font-medium tracking-wide text-center">
-            📍 {schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}
-          </p>
+          {/* Footer info */}
+          <div className="text-center text-[10px] text-gray-400 mt-auto pt-2 border-t border-gray-100">
+            <p>{schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}</p>
+          </div>
         </div>
       </div>
 
-      {/* Modal - Full Details */}
+      {/* ========================================================== */}
+      {/* MODAL - Full Details (reusable for any circular) */}
+      {/* ========================================================== */}
       <AnimatePresence>
-        {isModalOpen && (
+        {isModalOpen && selectedCircular && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -524,7 +596,9 @@ The procedure for admission will be provided in the form itself.
               <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl">
                 <div className="flex items-center gap-2">
                   <Bell size={20} className="text-gold-400" />
-                  <h3 className="text-white font-bold text-lg">📢 Admission Notice</h3>
+                  <h3 className="text-white font-bold text-lg">
+                    {selectedCircular.isPrimary ? '⭐ Application Form' : '📢 Notice'}
+                  </h3>
                 </div>
                 <button
                   onClick={closeModal}
@@ -536,34 +610,35 @@ The procedure for admission will be provided in the form itself.
 
               {/* Modal Body */}
               <div className="p-6 space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-                    🔥 ADMISSION OPEN
-                  </span>
-                  <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-                    2027-28
-                  </span>
-                </div>
-
-                <h4 className="text-xl font-bold text-maroon-900">{circular.title}</h4>
-                <p className="text-sm font-semibold text-gold-600">{circular.subtitle}</p>
+                {selectedCircular.isPrimary && (
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full animate-pulse">
+                      🔥 NEW
+                    </span>
+                    <span className="px-3 py-1 bg-gold-500 text-maroon-900 text-xs font-bold rounded-full">
+                      ⭐ HIGHLIGHT
+                    </span>
+                  </div>
+                )}
+                <h4 className="text-xl font-bold text-maroon-900">{selectedCircular.title}</h4>
+                <p className="text-sm font-semibold text-gold-600">{selectedCircular.subtitle}</p>
 
                 <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={16} className="text-gold-500" />
-                    {formatDateWithTime(circular.date, circular.time).split(' ')[0]}
+                    {formatDateWithTime(selectedCircular.date, selectedCircular.time).split(' ')[0]}
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Clock size={16} className="text-gold-500" />
-                    {circular.time || '00:00:00'}
+                    {selectedCircular.time || '00:00:00'}
                   </span>
                 </div>
 
-                {circular.description && (
+                {selectedCircular.description && (
                   <div className="border-t border-maroon-100 pt-4">
                     <div className="bg-maroon-50/50 p-4 rounded-lg border border-maroon-100">
                       <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                        {circular.description}
+                        {selectedCircular.description}
                       </p>
                     </div>
                   </div>
@@ -578,13 +653,13 @@ The procedure for admission will be provided in the form itself.
                     Enquire Now
                   </button>
 
-                  {circular.pdf && (
+                  {selectedCircular.pdf && (
                     <button
-                      onClick={handleDownloadPDF}
+                      onClick={() => handleDownloadPDF(selectedCircular.pdf)}
                       className="w-full py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       <Download size={16} />
-                      Download Admission Notice (PDF)
+                      {selectedCircular.isPrimary ? 'Download Application Form (PDF)' : 'Download Notice (PDF)'}
                     </button>
                   )}
                 </div>
@@ -603,6 +678,16 @@ The procedure for admission will be provided in the form itself.
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 8px 2px rgba(217, 164, 65, 0.3); }
+          50% { box-shadow: 0 0 20px 6px rgba(217, 164, 65, 0.6); }
+        }
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+      `}</style>
     </>
   )
 }
