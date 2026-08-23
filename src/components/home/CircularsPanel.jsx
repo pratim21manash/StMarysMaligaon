@@ -353,14 +353,16 @@
 
 
 // src/components/home/CircularsPanel.jsx
-import React, { useState } from 'react'
-import { Bell, Calendar, Clock, X, Download, FileText, ArrowRight, Sparkles } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
+import { Bell, Calendar, Clock, X, Download, FileText, ArrowRight, Sparkles, AlertCircle, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
 
 const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedCircular, setSelectedCircular] = useState(null)
+  const [isHovered, setIsHovered] = useState(false)
+  const containerRef = useRef(null)
 
   // Static circulars data
   const circulars = [
@@ -370,17 +372,16 @@ const CircularsPanel = () => {
       subtitle: 'Application Form Now Available',
       description: `The application form for admission to Class K.G. 2027-28 is now available for download. 
 
-📅 Last Date to Submit: 6th September 2026, 8:00 PM
+📅 Last Date to Submit: 12th September 2026
 
 Important Instructions:
 • Fill the form completely and accurately.
 • Attach required documents (Birth Certificate, Aadhar, etc.)
-• Submit the form at the school office or via email.
+• Submit the form at the school office from 8.30am to 10 am.
 • For any queries, contact the admission office.
 
 Download the form below and start your child's journey with St. Mary's!`,
       date: '2026-08-20',
-      time: '08:00:00',
       pdf: '/wp-content/uploads/2026/05/KG_APPLICATION_FORM-2027-28.pdf',
       isPrimary: true,
       badge: 'NEW',
@@ -390,13 +391,12 @@ Download the form below and start your child's journey with St. Mary's!`,
       id: 2,
       title: 'Admission Notice 2027',
       subtitle: 'Class K.G. 2027 Admissions Open',
-      description: `The application form for admission to Class K.G. 2027 can be downloaded from the school website between 24th August 2026, 8:00 a.m. to 6th September 2026, 8:00 p.m.
+      description: `The application form for admission to Class K.G. 2027 can be downloaded from the school website between 24th August 2026 to 12th September 2026.
 
 The procedure for admission will be provided in the form itself.
 
-📅 Last Date: 6th September 2026, 8:00 PM`,
+📅 Last Date: 12th September 2026`,
       date: '2026-08-17',
-      time: '10:00:00',
       pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf',
       isPrimary: false,
       badge: 'Notice',
@@ -404,14 +404,13 @@ The procedure for admission will be provided in the form itself.
     }
   ]
 
-  const formatDateWithTime = (dateStr, timeStr) => {
-    if (!dateStr) return ''
-    const date = new Date(dateStr)
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = date.getFullYear()
-    return `${day}/${month}/${year} ${timeStr || '00:00:00'}`
-  }
+  // Auto-play animation effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsHovered(prev => !prev)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   const formatDateOnly = (dateStr) => {
     if (!dateStr) return ''
@@ -420,6 +419,16 @@ The procedure for admission will be provided in the form itself.
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const year = date.getFullYear()
     return `${day}/${month}/${year}`
+  }
+
+  const formatDateFull = (dateStr) => {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
   }
 
   const handleCircularClick = (circular) => {
@@ -441,137 +450,195 @@ The procedure for admission will be provided in the form itself.
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full flex flex-col">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-maroon-800 to-maroon-700 px-4 py-3 flex items-center gap-2 flex-shrink-0">
-          <div className="animate-pulse">
-            <Bell size={18} className="text-gold-400" />
-          </div>
-          <h3 className="text-white font-semibold text-sm tracking-wide flex items-center gap-2">
-            🔔 Important Notices
-            <span className="text-[10px] bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded-full animate-pulse border border-gold-400/30">
-              {circulars.length} New
+      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full flex flex-col relative">
+        {/* ===== HEADER - MAROON & GOLD ===== */}
+        <div className="relative bg-gradient-to-r from-maroon-900 via-maroon-800 to-maroon-700 px-4 py-3.5 flex items-center gap-2 flex-shrink-0 overflow-hidden">
+          {/* Animated Shimmer Line */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
+          
+          {/* Bottom Gold Border */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent pulse-border" />
+
+          <div className="relative flex items-center gap-2 w-full">
+            <div className="animate-bell-pulse">
+              <Bell size={20} className="text-gold-400 drop-shadow-lg" />
+            </div>
+            <h3 className="text-white font-bold text-sm tracking-wide flex items-center gap-2 drop-shadow-md">
+              🔔 Important Notices
+              <span className="text-[10px] bg-gold-500/30 text-gold-300 px-2.5 py-0.5 rounded-full animate-pulse border border-gold-400/40 shadow-lg shadow-gold-500/20">
+                {circulars.length} New
+              </span>
+            </h3>
+            <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-3 py-0.5 rounded-full animate-pulse border border-gold-400/30 shadow-md shadow-gold-500/10">
+              ⚡ Urgent
             </span>
-          </h3>
-          <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-2.5 py-0.5 rounded-full animate-pulse border border-gold-400/30">
-            ⚡ Urgent
-          </span>
+          </div>
         </div>
 
-        {/* Main Content - Compact */}
-        <div className="flex-1 flex flex-col p-3 space-y-2 bg-gradient-to-b from-maroon-50/30 to-white overflow-y-auto">
+        {/* ===== MAIN CONTENT ===== */}
+        <div className="flex-1 flex flex-col p-3 space-y-2 bg-gradient-to-b from-maroon-50/20 to-white overflow-y-auto relative">
           
-          {/* ===================== PRIMARY NOTICE - PREMIUM ===================== */}
+          {/* Decorative Pattern Background */}
+          <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, #7A0C1E 1px, transparent 1px), radial-gradient(circle at 80% 50%, #D9A441 1px, transparent 1px)`,
+            backgroundSize: '40px 40px, 50px 50px',
+            backgroundPosition: '0 0, 20px 20px'
+          }} />
+
+          {/* ===== PRIMARY NOTICE - ULTRA PREMIUM ===== */}
           {primaryCircular && (
-            <div className="relative group">
-              {/* Animated Gold Border Glow */}
-              <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 animate-border-flow opacity-70" />
-              <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-gold-300 via-amber-400 to-gold-300 animate-border-flow-reverse opacity-40" style={{ animationDelay: '0.5s' }} />
-              <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-gold-400/20 via-transparent to-gold-400/20 blur-sm animate-pulse" />
+            <div className="relative group" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+              {/* ===== LAYER 1: OUTER GLOW BORDER (Animated) ===== */}
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 animate-border-flow opacity-90 blur-sm" />
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-300 via-amber-400 to-gold-300 animate-border-flow-reverse opacity-60 blur-md" style={{ animationDelay: '0.5s' }} />
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-400/30 via-transparent to-gold-400/30 blur-xl animate-pulse-glow" />
 
-              {/* Inner Content */}
-              <div className="relative bg-gradient-to-br from-white via-amber-50/10 to-white rounded-lg p-3 border border-gold-200/50 shadow-md shadow-gold-200/20">
-                
-                {/* Decorative Gold Corners */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold-400/30 rounded-tl-lg" />
-                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold-400/30 rounded-tr-lg" />
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold-400/30 rounded-bl-lg" />
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold-400/30 rounded-br-lg" />
+              {/* ===== LAYER 2: PULSING GOLD RING (Attention Grabber) ===== */}
+              <div className={`absolute -inset-2 rounded-xl border-2 border-gold-400/30 animate-ping-ring transition-opacity duration-1000 ${isHovered ? 'opacity-100' : 'opacity-70'}`} />
+              <div className={`absolute -inset-3 rounded-xl border border-gold-400/20 animate-ping-ring-delayed transition-opacity duration-1000 ${isHovered ? 'opacity-80' : 'opacity-50'}`} />
 
-                {/* Badges */}
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="px-2.5 py-0.5 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-[10px] font-bold rounded-full shadow-md shadow-gold-500/30 flex items-center gap-1">
-                    <Sparkles size={10} className="text-white animate-pulse" />
+              {/* ===== LAYER 3: SCANNER EFFECT ===== */}
+              <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gold-400/5 to-transparent scanner-effect" />
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-maroon-400/5 to-transparent scanner-effect-reverse" />
+              </div>
+
+              {/* ===== INNER CONTENT ===== */}
+              <div className="relative bg-gradient-to-br from-white via-gold-50/20 to-white rounded-xl p-3.5 border-2 border-gold-300/60 shadow-2xl shadow-gold-200/30 backdrop-blur-sm">
+
+                {/* ===== DECORATIVE GOLD CORNERS ===== */}
+                <div className="absolute top-0 left-0 w-10 h-10 border-t-3 border-l-3 border-gold-400/50 rounded-tl-xl animate-corner-glow" />
+                <div className="absolute top-0 right-0 w-10 h-10 border-t-3 border-r-3 border-gold-400/50 rounded-tr-xl animate-corner-glow-delay" />
+                <div className="absolute bottom-0 left-0 w-10 h-10 border-b-3 border-l-3 border-gold-400/50 rounded-bl-xl animate-corner-glow" />
+                <div className="absolute bottom-0 right-0 w-10 h-10 border-b-3 border-r-3 border-gold-400/50 rounded-br-xl animate-corner-glow-delay" />
+
+                {/* ===== FLOATING SPARKLES ===== */}
+                <div className="absolute top-1 right-8 text-gold-400/20 text-xl animate-float-sparkle">✦</div>
+                <div className="absolute bottom-8 left-2 text-gold-400/15 text-lg animate-float-sparkle-delay">✦</div>
+                <div className="absolute top-1/2 left-1 text-gold-400/10 text-sm animate-float-sparkle-slow">✦</div>
+
+                {/* ===== BADGES ===== */}
+                <div className="flex items-center gap-2 mb-1.5 relative">
+                  <span className="px-3 py-0.5 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg shadow-gold-500/40 flex items-center gap-1.5 animate-badge-pulse">
+                    <Sparkles size={10} className="text-white animate-sparkle-icon" />
                     ADMISSION OPEN
                   </span>
-                  <span className="px-2.5 py-0.5 bg-maroon-700 text-gold-300 text-[10px] font-bold rounded-full border border-gold-400/30">
+                  <span className="px-3 py-0.5 bg-gradient-to-r from-maroon-700 to-maroon-800 text-gold-300 text-[10px] font-bold rounded-full border border-gold-400/40 shadow-md shadow-maroon-900/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" />
                     2027-28
+                  </span>
+                  <span className="ml-auto px-2.5 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded-full animate-pulse shadow-lg shadow-red-500/30">
+                    NEW
                   </span>
                 </div>
 
-                {/* Title */}
-                <div className="space-y-0.5">
-                  <h4 className="text-sm font-bold text-maroon-900 leading-tight tracking-tight">
+                {/* ===== TITLE ===== */}
+                <div className="space-y-0.5 relative">
+                  <h4 className="text-sm font-bold text-maroon-900 leading-tight tracking-tight flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" />
                     {primaryCircular.title}
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" />
                   </h4>
                   <p className="text-xs font-semibold text-gold-600 flex items-center gap-1.5">
-                    <Sparkles size={12} className="text-gold-500 animate-sparkle" />
+                    <span className="relative">
+                      <Sparkles size={12} className="text-gold-500 animate-sparkle-icon" />
+                      <span className="absolute inset-0 animate-ping-opacity rounded-full bg-gold-400/30" />
+                    </span>
                     {primaryCircular.subtitle}
                   </p>
                 </div>
 
-                {/* Description preview */}
-                <div className="mt-1.5 bg-white/70 rounded-md p-1.5 border border-gold-100/50 shadow-inner">
-                  <p className="text-[11px] text-gray-700 leading-relaxed line-clamp-2">
+                {/* ===== DESCRIPTION PREVIEW ===== */}
+                <div className="mt-1.5 bg-white/80 rounded-lg p-2 border border-gold-200/60 shadow-inner relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-gold-400/5 via-transparent to-gold-400/5 shimmer-line" />
+                  <p className="text-[11px] text-gray-700 leading-relaxed line-clamp-2 relative z-10">
                     {primaryCircular.description.split('\n')[0]}
                   </p>
-                  <p className="text-[10px] font-semibold text-maroon-700 mt-0.5 flex items-center gap-1">
-                    <span className="text-[9px] animate-pulse text-gold-500">📅</span>
-                    Last Date: 6th September 2026
+                  <p className="text-[10px] font-semibold text-maroon-700 mt-0.5 flex items-center gap-1.5 relative z-10">
+                    <span className="flex items-center gap-1 text-[9px] animate-pulse text-gold-500">
+                      <span className="block w-1.5 h-1.5 rounded-full bg-gold-500 animate-ping" />
+                      📅
+                    </span>
+                    Last Date: 12th September 2026
                   </p>
                 </div>
 
-                {/* Action Buttons - No Enquire, just View & Download */}
-                <div className="flex gap-2 mt-2">
+                {/* ===== ACTION BUTTONS ===== */}
+                <div className="flex gap-2 mt-2.5">
                   <button
                     onClick={() => handleCircularClick(primaryCircular)}
-                    className="flex-1 py-1.5 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-1.5 group"
+                    className="flex-1 py-2 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-xs font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-maroon-500/40 transition-all duration-300 flex items-center justify-center gap-1.5 group relative overflow-hidden"
                   >
-                    <FileText size={13} className="text-gold-300" />
-                    View Details
-                    <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform text-gold-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 shimmer-button" />
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      <FileText size={13} className="text-gold-300" />
+                      View Details
+                      <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform text-gold-300" />
+                    </span>
                   </button>
                   <button
                     onClick={() => handleDownloadPDF(primaryCircular.pdf)}
-                    className="flex-1 py-1.5 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-maroon-900 font-semibold rounded-lg transition-all duration-300 text-xs flex items-center justify-center gap-1 shadow-sm hover:shadow-md"
+                    className="flex-1 py-2 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-maroon-900 font-bold rounded-lg transition-all duration-300 text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-gold-400/30 hover:shadow-xl hover:shadow-gold-500/40 group relative overflow-hidden"
                   >
-                    <Download size={13} />
-                    Download Form
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 shimmer-button" />
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      <Download size={13} className="group-hover:scale-110 transition-transform" />
+                      Download Form
+                    </span>
                   </button>
                 </div>
+
+                {/* ===== BOTTOM GLOW BAR ===== */}
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-400/60 to-transparent animate-slide-glow" />
               </div>
             </div>
           )}
 
-          {/* ===================== OTHER NOTICES ===================== */}
-          {otherCirculars.map((circular) => (
-            <div
-              key={circular.id}
-              className="bg-white/90 rounded-lg border border-maroon-100 shadow-sm p-2.5 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-gold-300"
-              onClick={() => handleCircularClick(circular)}
-            >
-              <div className="flex items-start gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-maroon-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Bell size={13} className="text-maroon-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-800 line-clamp-1">
-                    {circular.title}
-                  </p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-medium ${circular.badgeColor} text-white`}>
-                      {circular.badge}
-                    </span>
-                    <span className="text-[10px] text-gray-400 flex items-center gap-1">
-                      <Calendar size={10} />
-                      {formatDateOnly(circular.date)}
-                    </span>
+          {/* ===== OTHER NOTICES ===== */}
+          <div className="space-y-1.5 relative z-10">
+            {otherCirculars.map((circular) => (
+              <div
+                key={circular.id}
+                className="bg-white rounded-lg border border-maroon-100 shadow-sm p-2.5 hover:shadow-md hover:border-gold-300 transition-all duration-300 cursor-pointer group"
+                onClick={() => handleCircularClick(circular)}
+              >
+                <div className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-maroon-50 to-maroon-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
+                    <Bell size={13} className="text-maroon-600 group-hover:text-gold-600 transition-colors" />
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-gray-800 group-hover:text-maroon-700 transition-colors line-clamp-1">
+                      {circular.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-medium ${circular.badgeColor} text-white shadow-sm`}>
+                        {circular.badge}
+                      </span>
+                      <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                        <Calendar size={10} />
+                        {formatDateOnly(circular.date)}
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronRight size={14} className="text-gray-300 group-hover:text-gold-500 group-hover:translate-x-0.5 transition-all duration-300 flex-shrink-0 mt-1" />
                 </div>
-                <ArrowRight size={13} className="text-gray-300 flex-shrink-0 mt-1" />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
-          {/* Footer */}
-          <div className="text-center text-[9px] text-gray-400 mt-auto pt-1.5 border-t border-gray-100">
-            <p>{schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}</p>
+          {/* ===== FOOTER ===== */}
+          <div className="text-center text-[9px] text-gray-400 mt-auto pt-1.5 border-t border-gray-100 relative z-10">
+            <p className="flex items-center justify-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-gold-400/50 animate-pulse" />
+              {schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}
+              <span className="w-1 h-1 rounded-full bg-gold-400/50 animate-pulse" />
+            </p>
           </div>
         </div>
       </div>
 
       {/* ========================================================== */}
-      {/* MODAL - Same as before, but without Enquire button */}
+      {/* MODAL - Premium (Above everything) */}
       {/* ========================================================== */}
       <AnimatePresence>
         {isModalOpen && selectedCircular && (
@@ -579,7 +646,7 @@ The procedure for admission will be provided in the form itself.
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
             onClick={closeModal}
           >
             <motion.div
@@ -587,12 +654,16 @@ The procedure for admission will be provided in the form itself.
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border-t-4 border-gold-500"
+              className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative border-t-4 border-gold-500 z-[999]"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Modal Glow Border */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-2xl opacity-30 blur-lg animate-border-flow pointer-events-none z-[-1]" />
+
               {/* Modal Header */}
-              <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl">
-                <div className="flex items-center gap-2">
+              <div className="relative sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
+                <div className="relative flex items-center gap-2">
                   <Bell size={20} className="text-gold-400" />
                   <h3 className="text-white font-bold text-lg">
                     {selectedCircular.isPrimary ? '📋 Application Form' : '📢 Notice'}
@@ -600,18 +671,18 @@ The procedure for admission will be provided in the form itself.
                 </div>
                 <button
                   onClick={closeModal}
-                  className="text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full p-1.5"
+                  className="relative text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full p-1.5"
                 >
                   <X size={24} />
                 </button>
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 space-y-4">
+              <div className="relative p-6 space-y-4 z-10">
                 {selectedCircular.isPrimary && (
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-md shadow-gold-500/30">
-                      <Sparkles size={12} className="animate-pulse" />
+                    <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg shadow-gold-500/30">
+                      <Sparkles size={12} className="animate-sparkle-icon" />
                       ADMISSION OPEN
                     </span>
                     <span className="px-3 py-1 bg-maroon-700 text-gold-300 text-xs font-bold rounded-full border border-gold-400/30">
@@ -625,11 +696,7 @@ The procedure for admission will be provided in the form itself.
                 <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={16} className="text-gold-500" />
-                    {formatDateWithTime(selectedCircular.date, selectedCircular.time).split(' ')[0]}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock size={16} className="text-gold-500" />
-                    {selectedCircular.time || '00:00:00'}
+                    {formatDateFull(selectedCircular.date)}
                   </span>
                 </div>
 
@@ -647,9 +714,9 @@ The procedure for admission will be provided in the form itself.
                   {selectedCircular.pdf && (
                     <button
                       onClick={() => handleDownloadPDF(selectedCircular.pdf)}
-                      className="w-full py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/40 transition-all duration-300 flex items-center justify-center gap-2 group"
                     >
-                      <Download size={16} />
+                      <Download size={18} className="text-gold-400 group-hover:scale-110 transition-transform" />
                       {selectedCircular.isPrimary ? 'Download Application Form (PDF)' : 'Download Notice (PDF)'}
                     </button>
                   )}
@@ -660,7 +727,7 @@ The procedure for admission will be provided in the form itself.
               <div className="px-6 py-3 bg-maroon-50/80 border-t border-maroon-100 rounded-b-2xl flex justify-end">
                 <button
                   onClick={closeModal}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-maroon-800 transition-colors hover:bg-maroon-100 rounded-lg"
+                  className="px-5 py-2 text-sm font-medium text-gray-600 hover:text-maroon-800 transition-colors hover:bg-maroon-100 rounded-lg"
                 >
                   Close
                 </button>
@@ -670,7 +737,11 @@ The procedure for admission will be provided in the form itself.
         )}
       </AnimatePresence>
 
+      {/* ========================================================== */}
+      {/* CSS ANIMATIONS */}
+      {/* ========================================================== */}
       <style>{`
+        /* ===== BORDER FLOW ANIMATIONS ===== */
         @keyframes borderFlow {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -681,10 +752,6 @@ The procedure for admission will be provided in the form itself.
           50% { background-position: 0% 50%; }
           100% { background-position: 100% 50%; }
         }
-        @keyframes sparkle {
-          0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-          50% { transform: scale(1.2) rotate(10deg); opacity: 0.7; }
-        }
         .animate-border-flow {
           background-size: 200% 200%;
           animation: borderFlow 3s ease-in-out infinite;
@@ -693,8 +760,138 @@ The procedure for admission will be provided in the form itself.
           background-size: 200% 200%;
           animation: borderFlowReverse 3s ease-in-out infinite;
         }
-        .animate-sparkle {
-          animation: sparkle 1.5s ease-in-out infinite;
+
+        /* ===== PULSE GLOW ===== */
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-pulse-glow {
+          animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        /* ===== PING RING ===== */
+        @keyframes pingRing {
+          0% { transform: scale(0.95); opacity: 1; }
+          100% { transform: scale(1.05); opacity: 0; }
+        }
+        .animate-ping-ring {
+          animation: pingRing 2s ease-out infinite;
+        }
+        .animate-ping-ring-delayed {
+          animation: pingRing 2s ease-out infinite 0.5s;
+        }
+
+        /* ===== CORNER GLOW ===== */
+        @keyframes cornerGlow {
+          0%, 100% { border-color: rgba(217, 164, 65, 0.3); }
+          50% { border-color: rgba(217, 164, 65, 0.9); }
+        }
+        .animate-corner-glow {
+          animation: cornerGlow 1.5s ease-in-out infinite;
+        }
+        .animate-corner-glow-delay {
+          animation: cornerGlow 1.5s ease-in-out infinite 0.75s;
+        }
+
+        /* ===== SHIMMER LINE ===== */
+        @keyframes shimmerLine {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .shimmer-line {
+          animation: shimmerLine 3s ease-in-out infinite;
+        }
+
+        /* ===== SCANNER EFFECT ===== */
+        @keyframes scannerEffect {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+        .scanner-effect {
+          animation: scannerEffect 4s ease-in-out infinite;
+        }
+        .scanner-effect-reverse {
+          animation: scannerEffect 4s ease-in-out infinite reverse;
+        }
+
+        /* ===== SLIDE GLOW ===== */
+        @keyframes slideGlow {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-slide-glow {
+          animation: slideGlow 2s ease-in-out infinite;
+        }
+
+        /* ===== SHIMMER BUTTON ===== */
+        @keyframes shimmerButton {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .shimmer-button {
+          animation: shimmerButton 2s ease-in-out infinite;
+        }
+
+        /* ===== BELL PULSE ===== */
+        @keyframes bellPulse {
+          0%, 100% { transform: scale(1); }
+          25% { transform: scale(1.15); }
+          75% { transform: scale(1.05); }
+        }
+        .animate-bell-pulse {
+          animation: bellPulse 2s ease-in-out infinite;
+        }
+
+        /* ===== SPARKLE ICON ===== */
+        @keyframes sparkleIcon {
+          0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+          50% { transform: scale(1.3) rotate(15deg); opacity: 0.7; }
+        }
+        .animate-sparkle-icon {
+          animation: sparkleIcon 1.5s ease-in-out infinite;
+        }
+
+        /* ===== FLOAT SPARKLE ===== */
+        @keyframes floatSparkle {
+          0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.2; }
+          50% { transform: translateY(-5px) rotate(15deg); opacity: 0.5; }
+        }
+        .animate-float-sparkle {
+          animation: floatSparkle 4s ease-in-out infinite;
+        }
+        .animate-float-sparkle-delay {
+          animation: floatSparkle 4s ease-in-out infinite 1s;
+        }
+        .animate-float-sparkle-slow {
+          animation: floatSparkle 6s ease-in-out infinite 2s;
+        }
+
+        /* ===== BADGE PULSE ===== */
+        @keyframes badgePulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(217, 164, 65, 0.3); }
+          50% { box-shadow: 0 0 25px rgba(217, 164, 65, 0.7); }
+        }
+        .animate-badge-pulse {
+          animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        /* ===== PING OPACITY ===== */
+        @keyframes pingOpacity {
+          0% { transform: scale(1); opacity: 0.8; }
+          100% { transform: scale(1.5); opacity: 0; }
+        }
+        .animate-ping-opacity {
+          animation: pingOpacity 1.5s ease-out infinite;
+        }
+
+        /* ===== PULSE BORDER ===== */
+        @keyframes pulseBorder {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+        .pulse-border {
+          animation: pulseBorder 2s ease-in-out infinite;
         }
       `}</style>
     </>
@@ -702,3 +899,5 @@ The procedure for admission will be provided in the form itself.
 }
 
 export default CircularsPanel
+
+        
