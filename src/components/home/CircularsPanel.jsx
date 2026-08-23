@@ -353,16 +353,15 @@
 
 
 // src/components/home/CircularsPanel.jsx
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Bell, Calendar, Clock, X, Download, FileText, ArrowRight, Sparkles, AlertCircle, ChevronRight } from 'lucide-react'
+import { Bell, Calendar, Clock, X, Download, FileText, ArrowRight, Sparkles, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
 
 const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedCircular, setSelectedCircular] = useState(null)
-  const [isHovered, setIsHovered] = useState(false)
   const containerRef = useRef(null)
 
   // Static circulars data
@@ -404,14 +403,6 @@ The procedure for admission will be provided in the form itself.
       badgeColor: 'bg-maroon-600'
     }
   ]
-
-  // Auto-play animation effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsHovered(prev => !prev)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
 
   const formatDateOnly = (dateStr) => {
     if (!dateStr) return ''
@@ -462,19 +453,18 @@ The procedure for admission will be provided in the form itself.
         onClick={closeModal}
       >
         <motion.div
-          initial={{ scale: 0.9, y: 20 }}
+          initial={{ scale: 0.95, y: 10 }}
           animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          exit={{ scale: 0.95, y: 10 }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative border-t-4 border-gold-500"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Modal Glow Border */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-2xl opacity-30 blur-lg animate-border-flow pointer-events-none" />
+          {/* Modal Glow Border (static, no animation) */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 rounded-2xl opacity-30 pointer-events-none" />
 
           {/* Modal Header */}
           <div className="relative sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
             <div className="relative flex items-center gap-2">
               <Bell size={20} className="text-gold-400" />
               <h3 className="text-white font-bold text-lg">
@@ -493,8 +483,8 @@ The procedure for admission will be provided in the form itself.
           <div className="relative p-6 space-y-4 bg-white">
             {selectedCircular.isPrimary && (
               <div className="flex items-center gap-2">
-                <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg shadow-gold-500/30">
-                  <Sparkles size={12} className="animate-sparkle-icon" />
+                <span className="px-3 py-1 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-md shadow-gold-500/30">
+                  <Sparkles size={12} />
                   ADMISSION OPEN
                 </span>
                 <span className="px-3 py-1 bg-maroon-700 text-gold-300 text-xs font-bold rounded-full border border-gold-400/30">
@@ -555,23 +545,21 @@ The procedure for admission will be provided in the form itself.
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full flex flex-col relative">
         {/* ===== HEADER - MAROON & GOLD ===== */}
         <div className="relative bg-gradient-to-r from-maroon-900 via-maroon-800 to-maroon-700 px-4 py-3.5 flex items-center gap-2 flex-shrink-0 overflow-hidden">
-          {/* Animated Shimmer Line */}
+          {/* Animated Shimmer Line (smooth) */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-400/10 to-transparent shimmer-line" />
           
-          {/* Bottom Gold Border */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent pulse-border" />
+          {/* Bottom Gold Border (static) */}
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
 
           <div className="relative flex items-center gap-2 w-full">
-            <div className="animate-bell-pulse">
-              <Bell size={20} className="text-gold-400 drop-shadow-lg" />
-            </div>
+            <Bell size={20} className="text-gold-400 drop-shadow-lg" />
             <h3 className="text-white font-bold text-sm tracking-wide flex items-center gap-2 drop-shadow-md">
               🔔 Important Notices
-              <span className="text-[10px] bg-gold-500/30 text-gold-300 px-2.5 py-0.5 rounded-full animate-pulse border border-gold-400/40 shadow-lg shadow-gold-500/20">
+              <span className="text-[10px] bg-gold-500/30 text-gold-300 px-2.5 py-0.5 rounded-full border border-gold-400/40 shadow-md shadow-gold-500/20">
                 {circulars.length} New
               </span>
             </h3>
-            <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-3 py-0.5 rounded-full animate-pulse border border-gold-400/30 shadow-md shadow-gold-500/10">
+            <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-3 py-0.5 rounded-full border border-gold-400/30 shadow-md shadow-gold-500/10">
               ⚡ Urgent
             </span>
           </div>
@@ -587,65 +575,44 @@ The procedure for admission will be provided in the form itself.
             backgroundPosition: '0 0, 20px 20px'
           }} />
 
-          {/* ===== PRIMARY NOTICE - ULTRA PREMIUM ===== */}
+          {/* ===== PRIMARY NOTICE - PREMIUM WITH SMOOTH ANIMATIONS ===== */}
           {primaryCircular && (
-            <div className="relative group" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-              {/* ===== LAYER 1: OUTER GLOW BORDER (Animated) ===== */}
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 animate-border-flow opacity-90 blur-sm" />
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-300 via-amber-400 to-gold-300 animate-border-flow-reverse opacity-60 blur-md" style={{ animationDelay: '0.5s' }} />
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-400/30 via-transparent to-gold-400/30 blur-xl animate-pulse-glow" />
-
-              {/* ===== LAYER 2: PULSING GOLD RING (Attention Grabber) ===== */}
-              <div className={`absolute -inset-2 rounded-xl border-2 border-gold-400/30 animate-ping-ring transition-opacity duration-1000 ${isHovered ? 'opacity-100' : 'opacity-70'}`} />
-              <div className={`absolute -inset-3 rounded-xl border border-gold-400/20 animate-ping-ring-delayed transition-opacity duration-1000 ${isHovered ? 'opacity-80' : 'opacity-50'}`} />
-
-              {/* ===== LAYER 3: SCANNER EFFECT ===== */}
-              <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gold-400/5 to-transparent scanner-effect" />
-                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-maroon-400/5 to-transparent scanner-effect-reverse" />
-              </div>
+            <div className="relative group">
+              {/* ===== ANIMATED BORDER FLOW (Smooth) ===== */}
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400 animate-border-flow opacity-80 blur-sm" />
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-gold-300 via-amber-400 to-gold-300 animate-border-flow-reverse opacity-50 blur-md" style={{ animationDelay: '0.5s' }} />
 
               {/* ===== INNER CONTENT ===== */}
-              <div className="relative bg-gradient-to-br from-white via-gold-50/20 to-white rounded-xl p-3.5 border-2 border-gold-300/60 shadow-2xl shadow-gold-200/30 backdrop-blur-sm">
+              <div className="relative bg-gradient-to-br from-white via-gold-50/20 to-white rounded-xl p-3.5 border-2 border-gold-300/60 shadow-2xl shadow-gold-200/30">
 
-                {/* ===== DECORATIVE GOLD CORNERS ===== */}
-                <div className="absolute top-0 left-0 w-10 h-10 border-t-3 border-l-3 border-gold-400/50 rounded-tl-xl animate-corner-glow" />
-                <div className="absolute top-0 right-0 w-10 h-10 border-t-3 border-r-3 border-gold-400/50 rounded-tr-xl animate-corner-glow-delay" />
-                <div className="absolute bottom-0 left-0 w-10 h-10 border-b-3 border-l-3 border-gold-400/50 rounded-bl-xl animate-corner-glow" />
-                <div className="absolute bottom-0 right-0 w-10 h-10 border-b-3 border-r-3 border-gold-400/50 rounded-br-xl animate-corner-glow-delay" />
-
-                {/* ===== FLOATING SPARKLES ===== */}
-                <div className="absolute top-1 right-8 text-gold-400/20 text-xl animate-float-sparkle">✦</div>
-                <div className="absolute bottom-8 left-2 text-gold-400/15 text-lg animate-float-sparkle-delay">✦</div>
-                <div className="absolute top-1/2 left-1 text-gold-400/10 text-sm animate-float-sparkle-slow">✦</div>
+                {/* ===== DECORATIVE GOLD CORNERS (Static) ===== */}
+                <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-gold-400/40 rounded-tl-xl" />
+                <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-gold-400/40 rounded-tr-xl" />
+                <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-gold-400/40 rounded-bl-xl" />
+                <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-gold-400/40 rounded-br-xl" />
 
                 {/* ===== BADGES ===== */}
                 <div className="flex items-center gap-2 mb-1.5 relative">
-                  <span className="px-3 py-0.5 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg shadow-gold-500/40 flex items-center gap-1.5 animate-badge-pulse">
-                    <Sparkles size={10} className="text-white animate-sparkle-icon" />
+                  <span className="px-3 py-0.5 bg-gradient-to-r from-gold-500 to-amber-500 text-white text-[10px] font-bold rounded-full shadow-md shadow-gold-500/30 flex items-center gap-1.5">
+                    <Sparkles size={10} className="text-white" />
                     ADMISSION OPEN
                   </span>
                   <span className="px-3 py-0.5 bg-gradient-to-r from-maroon-700 to-maroon-800 text-gold-300 text-[10px] font-bold rounded-full border border-gold-400/40 shadow-md shadow-maroon-900/30 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
                     2027-28
                   </span>
-                  <span className="ml-auto px-2.5 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded-full animate-pulse shadow-lg shadow-red-500/30">
+                  <span className="ml-auto px-2.5 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded-full shadow-md shadow-red-500/20">
                     NEW
                   </span>
                 </div>
 
                 {/* ===== TITLE ===== */}
                 <div className="space-y-0.5 relative">
-                  <h4 className="text-sm font-bold text-maroon-900 leading-tight tracking-tight flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" />
+                  <h4 className="text-sm font-bold text-maroon-900 leading-tight tracking-tight">
                     {primaryCircular.title}
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" />
                   </h4>
                   <p className="text-xs font-semibold text-gold-600 flex items-center gap-1.5">
-                    <span className="relative">
-                      <Sparkles size={12} className="text-gold-500 animate-sparkle-icon" />
-                      <span className="absolute inset-0 animate-ping-opacity rounded-full bg-gold-400/30" />
-                    </span>
+                    <Sparkles size={12} className="text-gold-500" />
                     {primaryCircular.subtitle}
                   </p>
                 </div>
@@ -657,8 +624,7 @@ The procedure for admission will be provided in the form itself.
                     {primaryCircular.description.split('\n')[0]}
                   </p>
                   <p className="text-[10px] font-semibold text-maroon-700 mt-0.5 flex items-center gap-1.5 relative z-10">
-                    <span className="flex items-center gap-1 text-[9px] animate-pulse text-gold-500">
-                      <span className="block w-1.5 h-1.5 rounded-full bg-gold-500 animate-ping" />
+                    <span className="flex items-center gap-1 text-[9px] text-gold-500">
                       📅
                     </span>
                     Last Date: 12th September 2026
@@ -669,7 +635,7 @@ The procedure for admission will be provided in the form itself.
                 <div className="flex gap-2 mt-2.5">
                   <button
                     onClick={() => handleCircularClick(primaryCircular)}
-                    className="flex-1 py-2 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-xs font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-maroon-500/40 transition-all duration-300 flex items-center justify-center gap-1.5 group relative overflow-hidden"
+                    className="flex-1 py-2 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-xs font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-1.5 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 shimmer-button" />
                     <span className="relative z-10 flex items-center gap-1.5">
@@ -680,7 +646,7 @@ The procedure for admission will be provided in the form itself.
                   </button>
                   <button
                     onClick={() => handleDownloadPDF(primaryCircular.pdf)}
-                    className="flex-1 py-2 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-maroon-900 font-bold rounded-lg transition-all duration-300 text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-gold-400/30 hover:shadow-xl hover:shadow-gold-500/40 group relative overflow-hidden"
+                    className="flex-1 py-2 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-maroon-900 font-bold rounded-lg transition-all duration-300 text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-gold-400/20 hover:shadow-xl hover:shadow-gold-500/30 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 shimmer-button" />
                     <span className="relative z-10 flex items-center gap-1.5">
@@ -690,7 +656,7 @@ The procedure for admission will be provided in the form itself.
                   </button>
                 </div>
 
-                {/* ===== BOTTOM GLOW BAR ===== */}
+                {/* ===== BOTTOM GLOW BAR (Smooth) ===== */}
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-400/60 to-transparent animate-slide-glow" />
               </div>
             </div>
@@ -731,9 +697,7 @@ The procedure for admission will be provided in the form itself.
           {/* ===== FOOTER ===== */}
           <div className="text-center text-[9px] text-gray-400 mt-auto pt-1.5 border-t border-gray-100 relative z-10">
             <p className="flex items-center justify-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-gold-400/50 animate-pulse" />
               {schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}
-              <span className="w-1 h-1 rounded-full bg-gold-400/50 animate-pulse" />
             </p>
           </div>
         </div>
@@ -743,10 +707,10 @@ The procedure for admission will be provided in the form itself.
       <ModalComponent />
 
       {/* ========================================================== */}
-      {/* CSS ANIMATIONS */}
+      {/* CSS ANIMATIONS - Only Smooth, Non-Blinking */}
       {/* ========================================================== */}
       <style>{`
-        /* ===== BORDER FLOW ANIMATIONS ===== */
+        /* ===== BORDER FLOW ANIMATIONS (Smooth) ===== */
         @keyframes borderFlow {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -759,47 +723,14 @@ The procedure for admission will be provided in the form itself.
         }
         .animate-border-flow {
           background-size: 200% 200%;
-          animation: borderFlow 3s ease-in-out infinite;
+          animation: borderFlow 4s ease-in-out infinite;
         }
         .animate-border-flow-reverse {
           background-size: 200% 200%;
-          animation: borderFlowReverse 3s ease-in-out infinite;
+          animation: borderFlowReverse 4s ease-in-out infinite;
         }
 
-        /* ===== PULSE GLOW ===== */
-        @keyframes pulseGlow {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.05); }
-        }
-        .animate-pulse-glow {
-          animation: pulseGlow 2s ease-in-out infinite;
-        }
-
-        /* ===== PING RING ===== */
-        @keyframes pingRing {
-          0% { transform: scale(0.95); opacity: 1; }
-          100% { transform: scale(1.05); opacity: 0; }
-        }
-        .animate-ping-ring {
-          animation: pingRing 2s ease-out infinite;
-        }
-        .animate-ping-ring-delayed {
-          animation: pingRing 2s ease-out infinite 0.5s;
-        }
-
-        /* ===== CORNER GLOW ===== */
-        @keyframes cornerGlow {
-          0%, 100% { border-color: rgba(217, 164, 65, 0.3); }
-          50% { border-color: rgba(217, 164, 65, 0.9); }
-        }
-        .animate-corner-glow {
-          animation: cornerGlow 1.5s ease-in-out infinite;
-        }
-        .animate-corner-glow-delay {
-          animation: cornerGlow 1.5s ease-in-out infinite 0.75s;
-        }
-
-        /* ===== SHIMMER LINE ===== */
+        /* ===== SHIMMER LINE (Smooth) ===== */
         @keyframes shimmerLine {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
@@ -808,28 +739,16 @@ The procedure for admission will be provided in the form itself.
           animation: shimmerLine 3s ease-in-out infinite;
         }
 
-        /* ===== SCANNER EFFECT ===== */
-        @keyframes scannerEffect {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-        .scanner-effect {
-          animation: scannerEffect 4s ease-in-out infinite;
-        }
-        .scanner-effect-reverse {
-          animation: scannerEffect 4s ease-in-out infinite reverse;
-        }
-
-        /* ===== SLIDE GLOW ===== */
+        /* ===== SLIDE GLOW (Smooth) ===== */
         @keyframes slideGlow {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
         }
         .animate-slide-glow {
-          animation: slideGlow 2s ease-in-out infinite;
+          animation: slideGlow 2.5s ease-in-out infinite;
         }
 
-        /* ===== SHIMMER BUTTON ===== */
+        /* ===== SHIMMER BUTTON (Smooth) ===== */
         @keyframes shimmerButton {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
@@ -837,71 +756,9 @@ The procedure for admission will be provided in the form itself.
         .shimmer-button {
           animation: shimmerButton 2s ease-in-out infinite;
         }
-
-        /* ===== BELL PULSE ===== */
-        @keyframes bellPulse {
-          0%, 100% { transform: scale(1); }
-          25% { transform: scale(1.15); }
-          75% { transform: scale(1.05); }
-        }
-        .animate-bell-pulse {
-          animation: bellPulse 2s ease-in-out infinite;
-        }
-
-        /* ===== SPARKLE ICON ===== */
-        @keyframes sparkleIcon {
-          0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-          50% { transform: scale(1.3) rotate(15deg); opacity: 0.7; }
-        }
-        .animate-sparkle-icon {
-          animation: sparkleIcon 1.5s ease-in-out infinite;
-        }
-
-        /* ===== FLOAT SPARKLE ===== */
-        @keyframes floatSparkle {
-          0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.2; }
-          50% { transform: translateY(-5px) rotate(15deg); opacity: 0.5; }
-        }
-        .animate-float-sparkle {
-          animation: floatSparkle 4s ease-in-out infinite;
-        }
-        .animate-float-sparkle-delay {
-          animation: floatSparkle 4s ease-in-out infinite 1s;
-        }
-        .animate-float-sparkle-slow {
-          animation: floatSparkle 6s ease-in-out infinite 2s;
-        }
-
-        /* ===== BADGE PULSE ===== */
-        @keyframes badgePulse {
-          0%, 100% { box-shadow: 0 0 10px rgba(217, 164, 65, 0.3); }
-          50% { box-shadow: 0 0 25px rgba(217, 164, 65, 0.7); }
-        }
-        .animate-badge-pulse {
-          animation: badgePulse 2s ease-in-out infinite;
-        }
-
-        /* ===== PING OPACITY ===== */
-        @keyframes pingOpacity {
-          0% { transform: scale(1); opacity: 0.8; }
-          100% { transform: scale(1.5); opacity: 0; }
-        }
-        .animate-ping-opacity {
-          animation: pingOpacity 1.5s ease-out infinite;
-        }
-
-        /* ===== PULSE BORDER ===== */
-        @keyframes pulseBorder {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
-        }
-        .pulse-border {
-          animation: pulseBorder 2s ease-in-out infinite;
-        }
       `}</style>
     </>
   )
 }
 
 export default CircularsPanel
-
