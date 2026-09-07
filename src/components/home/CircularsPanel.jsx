@@ -99,7 +99,7 @@ const CircularsPanel = () => {
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-maroon-600 font-medium">
                 <Clock size={16} className="text-gold-500" />
-                <span>⏰ Last Date: 12th September 2026, 11:59 PM</span>
+                <span>⏰ Last Date: 12th September 2026, 10.30 PM</span>
               </div>
             </div>
           </div>
