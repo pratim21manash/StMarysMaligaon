@@ -60,22 +60,7 @@ const Management = () => {
 
       <section className="section-padding">
         <div className="container-custom max-w-4xl mx-auto">
-          {/* Description */}
-          <SectionWrapper className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8">
-            <p className="text-gray-600 leading-relaxed">
-              St. Mary's Senior Secondary School, Maligaon is managed by a dedicated
-              governing body committed to upholding the school's founding values while
-              steering its academic and administrative growth. The management works
-              closely with the Principal, teaching faculty, and Managing Committee to
-              ensure the institution continues to meet CBSE standards and serve its
-              community well.
-            </p>
-            <p className="text-gray-600 leading-relaxed mt-4">
-              Key responsibilities include policy oversight, infrastructure planning,
-              financial governance, and ensuring compliance with all regulatory and
-              affiliation requirements.
-            </p>
-          </SectionWrapper>
+       
 
           {/* Management Team Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
