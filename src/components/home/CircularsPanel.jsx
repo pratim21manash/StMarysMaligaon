@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import {
   Bell,
@@ -6,8 +5,6 @@ import {
   Clock,
   X,
   Download,
-  Phone,
-  ArrowRight,
   Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -91,10 +88,6 @@ const CircularsPanel = () => {
 
   const handleDownloadPDF = (pdf) => {
     if (pdf) window.open(pdf, '_blank')
-  }
-
-  const handleEnquireNow = () => {
-    window.location.href = '/contact-us'
   }
 
   /* ------------------------------------------------------------------
@@ -234,25 +227,13 @@ const CircularsPanel = () => {
                     View Details
                   </button>
 
-                  {notice.pdf ? (
+                  {notice.pdf && (
                     <button
                       onClick={() => handleDownloadPDF(notice.pdf)}
                       className="flex-1 py-1.5 bg-maroon-700 hover:bg-maroon-800 text-white text-[10px] font-semibold rounded-lg transition-colors flex items-center justify-center gap-1"
                     >
                       <Download size={11} />
                       Download PDF
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleEnquireNow}
-                      className="flex-1 py-1.5 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-[10px] font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-1 group"
-                    >
-                      <Phone size={11} className="text-gold-400" />
-                      Enquire Now
-                      <ArrowRight
-                        size={10}
-                        className="group-hover:translate-x-0.5 transition-transform"
-                      />
                     </button>
                   )}
                 </div>
@@ -351,16 +332,8 @@ const CircularsPanel = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="space-y-2 pt-2">
-                  <button
-                    onClick={handleEnquireNow}
-                    className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Phone size={18} className="text-gold-400" />
-                    Enquire Now
-                  </button>
-
-                  {activeNotice.pdf && (
+                {activeNotice.pdf && (
+                  <div className="pt-2">
                     <button
                       onClick={() => handleDownloadPDF(activeNotice.pdf)}
                       className="w-full py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -368,8 +341,8 @@ const CircularsPanel = () => {
                       <Download size={16} />
                       Download Admission Notice (PDF)
                     </button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Modal Footer */}
