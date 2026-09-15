@@ -24,14 +24,14 @@ const CircularsPanel = () => {
       theme: 'gold',
       badge: 'NEW ANNOUNCEMENT',
       badgeIcon: '✨',
-      title: '📅 KG Admission 2026-27',
+      title: '📅 KG Admission 2027-28',
       subtitle: 'Interaction Date & Time',
       message:
         'Interaction Date and Time for KG admission 26-27 will be announced on 19th September 2026',
       highlight: '19th September 2026',
       date: '2026-09-19',
       time: null,
-      session: '2026-27',
+      session: '2027-28',
       pdf: null,
     },
     {
