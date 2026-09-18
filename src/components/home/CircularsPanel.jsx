@@ -5,7 +5,9 @@ import {
   Clock,
   X,
   Download,
+  FileText,
   Sparkles,
+  ArrowRight,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
@@ -17,56 +19,24 @@ const CircularsPanel = () => {
   /* ------------------------------------------------------------------
    *  NOTICES  (newest first)
    * ------------------------------------------------------------------ */
-  const notices = [
-    {
-      id: 3,
-      isNew: true,
-      theme: 'gold',
-      badge: 'NEW ANNOUNCEMENT',
-      badgeIcon: '✨',
-      title: '📅 KG Admission 2027-28',
-      subtitle: 'Interaction Date & Time',
-      message:
-        'Kindly download the Interaction Date & Time for KG Admission 2027-2028.',
-      highlight: null,
-      date: '2026-09-19',
-      time: '10:00:00',
-      session: '2027-28',
-      pdf: '/management/kgAdmission.pdf',
-    },
-    {
-      id: 2,
-      isNew: true,
-      theme: 'gold',
-      badge: 'NEW ANNOUNCEMENT',
-      badgeIcon: '✨',
-      title: '📅 KG Admission 2027-28',
-      subtitle: 'Interaction Date & Time',
-      message:
-        'Interaction Date and Time for KG admission 26-27 will be announced on 19th September 2026',
-      highlight: '19th September 2026',
-      date: '2026-09-19',
-      time: null,
-      session: '2027-28',
-      pdf: null,
-    },
-    {
-      id: 1,
-      isNew: false,
-      theme: 'maroon',
-      badge: 'ADMISSION OPEN',
-      badgeIcon: '🔥',
-      title: '📢 KG ADMISSION 2027',
-      subtitle: 'Class K.G. 2027 Admissions',
-      message:
-        'The filled up KG admission form shall be submitted by 12 September',
-      highlight: '12 September',
-      date: '2026-09-12',
-      time: '10:30:00',
-      session: '2027-28',
-      pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf',
-    },
-  ]
+    const notices = [
+      {
+        id: 1,
+        isNew: true,
+        theme: 'gold',
+        badge: 'NEW ANNOUNCEMENT',
+        badgeIcon: '✨',
+        title: '📅 KG Admission 2027-28',
+        subtitle: 'Interaction Date & Time',
+        message:
+          'Kindly download the Interaction Date & Time for KG Admission 2027-2028.',
+        highlight: 'Interaction Date & Time',
+        date: '2026-09-19',
+        time: '10:00:00',
+        session: '2027-28',
+        pdf: '/management/kgAdmission.pdf',
+      },
+    ]
 
   /* ------------------------------------------------------------------
    *  HELPERS
@@ -103,7 +73,13 @@ const CircularsPanel = () => {
   const closeModal = () => setIsModalOpen(false)
 
   const handleDownloadPDF = (pdf) => {
-    if (pdf) window.open(pdf, '_blank')
+    if (!pdf) return
+    const link = document.createElement('a')
+    link.href = pdf
+    link.download = 'kgAdmission.pdf'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   /* ------------------------------------------------------------------
@@ -111,20 +87,6 @@ const CircularsPanel = () => {
    * ------------------------------------------------------------------ */
   return (
     <>
-      {/* Custom thin scrollbar styling for the notices list */}
-      <style>{`
-        .circular-scroll::-webkit-scrollbar { width: 5px; }
-        .circular-scroll::-webkit-scrollbar-track { background: transparent; }
-        .circular-scroll::-webkit-scrollbar-thumb {
-          background: rgba(122, 12, 30, 0.18);
-          border-radius: 9999px;
-        }
-        .circular-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(122, 12, 30, 0.35);
-        }
-        .circular-scroll { scrollbar-width: thin; scrollbar-color: rgba(122,12,30,0.2) transparent; }
-      `}</style>
-
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full min-h-0 flex flex-col">
         {/* ---------------- Header - Maroon Theme ---------------- */}
         <div className="bg-gradient-to-r from-maroon-800 to-maroon-700 px-3.5 py-3 flex items-center gap-2 flex-shrink-0">
@@ -132,9 +94,9 @@ const CircularsPanel = () => {
             <Bell size={17} className="text-gold-400" />
           </div>
           <h3 className="text-white font-bold text-[11px] tracking-wide flex items-center gap-1.5">
-            🔔 Important Notices
+            🔔 Important Notice
             <span className="text-[9px] bg-gold-500/20 text-gold-300 px-1.5 py-0.5 rounded-full animate-pulse border border-gold-400/30">
-              {notices.length} New
+              New
             </span>
           </h3>
           <span className="ml-auto text-[9px] text-gold-300 font-medium bg-gold-500/20 px-2 py-0.5 rounded-full animate-pulse border border-gold-400/30">
@@ -142,84 +104,56 @@ const CircularsPanel = () => {
           </span>
         </div>
 
-        {/* ---------------- Notice List (scrollable) ---------------- */}
-        <div className="circular-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-2.5 bg-gradient-to-b from-maroon-50/30 to-white">
+        {/* Single Notice */}
+        <div className="flex-1 min-h-0 p-3.5 bg-gradient-to-b from-maroon-50/40 via-white to-maroon-50/30 flex flex-col">
           {notices.map((notice) => (
             <motion.div
               key={notice.id}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: notice.isNew ? 0 : 0.1 }}
-              className={`relative overflow-hidden rounded-xl border-2 shadow-sm hover:shadow-lg transition-shadow duration-300 ${
-                notice.theme === 'gold'
-                  ? 'border-gold-300 bg-gradient-to-br from-gold-50 via-white to-maroon-50'
-                  : 'border-maroon-200 bg-white'
-              }`}
+              transition={{ duration: 0.4 }}
+              className="relative flex-1 flex flex-col overflow-hidden rounded-2xl border-2 border-gold-300 bg-gradient-to-br from-gold-50 via-white to-maroon-50 shadow-lg"
             >
-              {/* Decorative glow (only for the brand-new notice) */}
-              {notice.isNew && (
-                <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-gold-300/40 blur-2xl" />
-              )}
+              <div className="pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gold-300/40 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-maroon-300/30 blur-3xl" />
+              <div className="h-1.5 w-full bg-gradient-to-r from-gold-400 via-maroon-600 to-gold-400" />
 
-              {/* Top accent bar */}
-              <div
-                className={`h-1 w-full ${
-                  notice.theme === 'gold'
-                    ? 'bg-gradient-to-r from-gold-400 via-maroon-500 to-gold-400'
-                    : 'bg-gradient-to-r from-maroon-700 to-maroon-500'
-                }`}
-              />
-
-              <div className="relative p-3 space-y-2">
-                {/* ---- Badges ---- */}
+              <div className="relative flex-1 flex flex-col p-4 space-y-3">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    className={`px-2 py-0.5 text-[9px] font-bold rounded-full border ${
-                      notice.theme === 'gold'
-                        ? 'bg-gold-100 text-maroon-800 border-gold-300 animate-pulse'
-                        : 'bg-maroon-100 text-maroon-800 border-maroon-200'
-                    }`}
-                  >
+                  <span className="px-2.5 py-1 bg-gold-100 text-maroon-800 text-[10px] font-bold rounded-full border border-gold-300 animate-pulse">
                     {notice.badgeIcon} {notice.badge}
                   </span>
-
-                  <span className="px-2 py-0.5 bg-white text-maroon-800 text-[9px] font-bold rounded-full border border-maroon-200">
+                  <span className="px-2.5 py-1 bg-white text-maroon-800 text-[10px] font-bold rounded-full border border-maroon-200">
                     {notice.session}
                   </span>
-
-                  {notice.isNew && (
-                    <span className="ml-auto flex items-center gap-1 text-[9px] font-extrabold text-gold-600 tracking-wide">
-                      <Sparkles size={10} className="animate-pulse" />
-                      NEW
-                    </span>
-                  )}
+                  <span className="ml-auto flex items-center gap-1 text-[10px] font-extrabold text-gold-600 tracking-wide">
+                    <Sparkles size={11} className="animate-pulse" />
+                    NEW
+                  </span>
                 </div>
 
-                {/* ---- Title ---- */}
-                <div>
-                  <h4 className="text-[12px] font-bold text-maroon-900 leading-snug">
+                <div className="text-center pt-1">
+                  <h4 className="text-base font-extrabold text-maroon-900 leading-snug">
                     {notice.title}
                   </h4>
-                  <p className="text-[10px] font-semibold text-gold-600 mt-0.5">
+                  <p className="text-[11px] font-semibold text-gold-600 mt-0.5">
                     {notice.subtitle}
                   </p>
                 </div>
 
-                {/* ---- Message Box ---- */}
-                <div
-                  className={`rounded-lg p-2.5 border ${
-                    notice.theme === 'gold'
-                      ? 'bg-white/85 border-gold-200 shadow-inner'
-                      : 'bg-maroon-50/70 border-maroon-100'
-                  }`}
-                >
-                  <p className="text-[11px] font-semibold text-maroon-900 leading-relaxed text-center">
-                    {renderMessage(notice)}
-                  </p>
+                <div className="flex-1 flex items-center justify-center py-2">
+                  <div className="relative w-full">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-gold-400 via-maroon-500 to-gold-400 rounded-xl blur opacity-25 animate-pulse" />
+                    <div className="relative bg-white/90 border-2 border-gold-300 rounded-xl px-4 py-5 shadow-inner text-center">
+                      <FileText size={26} className="mx-auto text-gold-500 mb-2" />
+                      <p className="text-[13px] md:text-sm font-extrabold text-maroon-900 leading-relaxed">
+                        {renderMessage(notice)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* ---- Meta ---- */}
-                <div className="flex items-center gap-2.5 text-[10px] text-maroon-600 font-medium">
+                <div className="flex items-center justify-center gap-3 text-[10px] text-maroon-600 font-medium">
                   <span className="flex items-center gap-1">
                     <Calendar size={11} className="text-gold-500" />
                     {formatDateOnly(notice.date)}
@@ -230,28 +164,24 @@ const CircularsPanel = () => {
                   </span>
                 </div>
 
-                {/* ---- Actions ---- */}
-                <div className="flex gap-2 pt-0.5">
-                  <button
-                    onClick={() => openModal(notice)}
-                    className={`flex-1 py-1.5 text-[10px] font-semibold rounded-lg transition-colors border ${
-                      notice.theme === 'gold'
-                        ? 'bg-white hover:bg-gold-50 text-maroon-800 border-gold-300'
-                        : 'bg-maroon-50 hover:bg-maroon-100 text-maroon-800 border-maroon-200'
-                    }`}
-                  >
-                    View Details
-                  </button>
-
+                <div className="space-y-2 pt-1">
                   {notice.pdf && (
                     <button
                       onClick={() => handleDownloadPDF(notice.pdf)}
-                      className="flex-1 py-1.5 bg-maroon-700 hover:bg-maroon-800 text-white text-[10px] font-semibold rounded-lg transition-colors flex items-center justify-center gap-1"
+                      className="w-full py-2.5 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white text-[12px] font-bold rounded-xl shadow-md hover:shadow-lg hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2 group"
                     >
-                      <Download size={11} />
+                      <Download size={15} className="text-gold-400" />
                       Download PDF
+                      <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   )}
+
+                  <button
+                    onClick={() => openModal(notice)}
+                    className="w-full py-2 bg-white hover:bg-gold-50 text-maroon-800 text-[11px] font-semibold rounded-lg transition-colors border border-gold-300"
+                  >
+                    View Details
+                  </button>
                 </div>
               </div>
             </motion.div>
