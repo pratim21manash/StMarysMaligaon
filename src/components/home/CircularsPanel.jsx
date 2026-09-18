@@ -6,24 +6,16 @@ import { schoolInfo } from '../../data/seedData.js'
 const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Static circular data - Simplified
+  // Static circular data - Interaction Notice
   const circular = {
     id: 1,
-    title: '📢 KG ADMISSION 2027',
-    subtitle: 'Class K.G. 2027 Admissions',
-    description: `The filled up KG admission form shall be submitted by 12 September`,
-    date: '2026-09-12',
-    time: '23:59:59',
-    pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf'
-  }
-
-  const formatDateWithTime = (dateStr, timeStr) => {
-    if (!dateStr) return ''
-    const date = new Date(dateStr)
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = date.getFullYear()
-    return `${day}/${month}/${year} ${timeStr || '00:00:00'}`
+    title: '📢 KG ADMISSION 2027-2028',
+    subtitle: 'Interaction Date & Time Notice',
+    description: `Kindly download the Interaction Date & Time for KG Admission 2027-2028.`,
+    date: '2026-09-19',
+    time: '10:00:00',
+    // Correct path to the PDF inside public/management/
+    pdf: '/management/kgAdmission.pdf'
   }
 
   const formatDateOnly = (dateStr) => {
@@ -43,8 +35,14 @@ const CircularsPanel = () => {
     setIsModalOpen(false)
   }
 
+  // Force download of the PDF
   const handleDownloadPDF = () => {
-    window.open(circular.pdf, '_blank')
+    const link = document.createElement('a')
+    link.href = circular.pdf
+    link.download = 'kgAdmission.pdf'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   const handleEnquireNow = () => {
@@ -70,36 +68,31 @@ const CircularsPanel = () => {
           </span>
         </div>
 
-        {/* Main Content - Full height notice */}
+        {/* Main Content */}
         <div className="flex-1 flex flex-col p-4 space-y-3 bg-gradient-to-b from-maroon-50/30 to-white">
           {/* Notice Badge */}
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-              🔥 ADMISSION OPEN
+              🔥 KG ADMISSION 2027-28
             </span>
             <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-              2027-28
+              Interaction
             </span>
           </div>
 
           {/* Main Message - Big, Bold, Center */}
           <div className="flex-1 flex flex-col items-center justify-center py-4 px-2">
-            <div className="text-center space-y-3">
+            <div className="text-center space-y-3 w-full">
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-gold-400 via-maroon-500 to-gold-400 rounded-lg blur opacity-30 animate-pulse"></div>
-                <p className="relative text-2xl md:text-3xl font-extrabold text-maroon-900 leading-tight tracking-wide bg-white/80 px-4 py-3 rounded-lg border-2 border-gold-300 shadow-lg">
-                  The filled up KG admission form
-                  <br />
-                  shall be submitted by
-                  <br />
-                  <span className="text-3xl md:text-4xl text-gold-600 block mt-1 animate-pulse">
-                    12 September
-                  </span>
+                <p className="relative text-xl md:text-2xl font-extrabold text-maroon-900 leading-tight tracking-wide bg-white/80 px-4 py-3 rounded-lg border-2 border-gold-300 shadow-lg">
+                  Kindly download the Interaction Date &amp; Time for KG Admission 2027-2028.
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-2 text-sm text-maroon-600 font-medium">
-                <Clock size={16} className="text-gold-500" />
-                <span>⏰ Last Date: 12th September 2026, 10.30 AM</span>
+
+              <div className="flex items-center justify-center gap-2 text-xs text-maroon-600 font-medium">
+                <Clock size={14} className="text-gold-500" />
+                <span>📅 Posted on: {formatDateOnly(circular.date)}</span>
               </div>
             </div>
           </div>
@@ -162,10 +155,10 @@ const CircularsPanel = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+              <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
                 <div className="flex items-center gap-2">
                   <Bell size={20} className="text-gold-400" />
-                  <h3 className="text-white font-bold text-lg">📢 Admission Notice</h3>
+                  <h3 className="text-white font-bold text-lg">📢 KG Admission Notice</h3>
                 </div>
                 <button
                   onClick={closeModal}
@@ -179,10 +172,10 @@ const CircularsPanel = () => {
               <div className="p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-                    🔥 ADMISSION OPEN
+                    🔥 KG ADMISSION 2027-28
                   </span>
                   <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-                    2027-28
+                    Interaction
                   </span>
                 </div>
 
@@ -192,29 +185,17 @@ const CircularsPanel = () => {
                 <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={16} className="text-gold-500" />
-                    {formatDateWithTime(circular.date, circular.time).split(' ')[0]}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock size={16} className="text-gold-500" />
-                    {circular.time || '00:00:00'}
+                    {formatDateOnly(circular.date)}
                   </span>
                 </div>
 
-                {circular.description && (
-                  <div className="border-t border-maroon-100 pt-4">
-                    <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
-                      <p className="text-2xl md:text-3xl font-extrabold text-maroon-900 text-center leading-relaxed">
-                        The filled up KG admission form
-                        <br />
-                        shall be submitted by
-                        <br />
-                        <span className="text-3xl md:text-4xl text-gold-600 block mt-2 animate-pulse">
-                          12 September
-                        </span>
-                      </p>
-                    </div>
+                <div className="border-t border-maroon-100 pt-4">
+                  <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
+                    <p className="text-xl md:text-2xl font-extrabold text-maroon-900 text-center leading-relaxed">
+                      {circular.description}
+                    </p>
                   </div>
-                )}
+                </div>
 
                 <div className="space-y-2 pt-2">
                   <button
@@ -231,7 +212,7 @@ const CircularsPanel = () => {
                       className="w-full py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       <Download size={16} />
-                      Download Admission Notice (PDF)
+                      Download Interaction Notice (PDF)
                     </button>
                   )}
                 </div>
