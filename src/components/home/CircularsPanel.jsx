@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
-import { Bell, Calendar, Clock, X, Download, FileText, Phone, ArrowRight } from 'lucide-react'
+import {
+  Bell,
+  Calendar,
+  Clock,
+  X,
+  Download,
+  Sparkles,
+} from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { schoolInfo } from '../../data/seedData.js'
 
 const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [activeNotice, setActiveNotice] = useState(null)
 
+<<<<<<< HEAD
   // Static circular data - Interaction Notice
   const circular = {
     id: 1,
@@ -17,7 +26,49 @@ const CircularsPanel = () => {
     // Correct path to the PDF inside public/management/
     pdf: '/management/kgAdmission.pdf'
   }
+=======
+  /* ------------------------------------------------------------------
+   *  NOTICES  (newest first)
+   * ------------------------------------------------------------------ */
+  const notices = [
+    {
+      id: 2,
+      isNew: true,
+      theme: 'gold',
+      badge: 'NEW ANNOUNCEMENT',
+      badgeIcon: '✨',
+      title: '📅 KG Admission 2027-28',
+      subtitle: 'Interaction Date & Time',
+      message:
+        'Interaction Date and Time for KG admission 26-27 will be announced on 19th September 2026',
+      highlight: '19th September 2026',
+      date: '2026-09-19',
+      time: null,
+      session: '2027-28',
+      pdf: null,
+    },
+    {
+      id: 1,
+      isNew: false,
+      theme: 'maroon',
+      badge: 'ADMISSION OPEN',
+      badgeIcon: '🔥',
+      title: '📢 KG ADMISSION 2027',
+      subtitle: 'Class K.G. 2027 Admissions',
+      message:
+        'The filled up KG admission form shall be submitted by 12 September',
+      highlight: '12 September',
+      date: '2026-09-12',
+      time: '10:30:00',
+      session: '2027-28',
+      pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf',
+    },
+  ]
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
 
+  /* ------------------------------------------------------------------
+   *  HELPERS
+   * ------------------------------------------------------------------ */
   const formatDateOnly = (dateStr) => {
     if (!dateStr) return ''
     const date = new Date(dateStr)
@@ -27,10 +78,27 @@ const CircularsPanel = () => {
     return `${day}/${month}/${year}`
   }
 
-  const handleCircularClick = () => {
+  /** Renders the message with the important date highlighted in gold */
+  const renderMessage = (notice) => {
+    if (!notice.highlight || !notice.message.includes(notice.highlight)) {
+      return notice.message
+    }
+    const [before, after] = notice.message.split(notice.highlight)
+    return (
+      <>
+        {before}
+        <span className="text-gold-600 font-extrabold">{notice.highlight}</span>
+        {after}
+      </>
+    )
+  }
+
+  const openModal = (notice) => {
+    setActiveNotice(notice)
     setIsModalOpen(true)
   }
 
+<<<<<<< HEAD
   const closeModal = () => {
     setIsModalOpen(false)
   }
@@ -47,27 +115,51 @@ const CircularsPanel = () => {
 
   const handleEnquireNow = () => {
     window.location.href = '/contact-us'
+=======
+  const closeModal = () => setIsModalOpen(false)
+
+  const handleDownloadPDF = (pdf) => {
+    if (pdf) window.open(pdf, '_blank')
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
   }
 
+  /* ------------------------------------------------------------------
+   *  RENDER
+   * ------------------------------------------------------------------ */
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full flex flex-col">
-        {/* Header - Maroon Theme */}
-        <div className="bg-gradient-to-r from-maroon-800 to-maroon-700 px-4 py-4 flex items-center gap-2 flex-shrink-0">
+      {/* Custom thin scrollbar styling for the notices list */}
+      <style>{`
+        .circular-scroll::-webkit-scrollbar { width: 5px; }
+        .circular-scroll::-webkit-scrollbar-track { background: transparent; }
+        .circular-scroll::-webkit-scrollbar-thumb {
+          background: rgba(122, 12, 30, 0.18);
+          border-radius: 9999px;
+        }
+        .circular-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(122, 12, 30, 0.35);
+        }
+        .circular-scroll { scrollbar-width: thin; scrollbar-color: rgba(122,12,30,0.2) transparent; }
+      `}</style>
+
+      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden w-full h-full min-h-0 flex flex-col">
+        {/* ---------------- Header - Maroon Theme ---------------- */}
+        <div className="bg-gradient-to-r from-maroon-800 to-maroon-700 px-3.5 py-3 flex items-center gap-2 flex-shrink-0">
           <div className="animate-pulse">
-            <Bell size={20} className="text-gold-400" />
+            <Bell size={17} className="text-gold-400" />
           </div>
-          <h3 className="text-white font-bold text-sm tracking-wide flex items-center gap-2">
-            🔔 Important Notice
-            <span className="text-[10px] bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded-full animate-pulse border border-gold-400/30">
-              New
+          <h3 className="text-white font-bold text-[11px] tracking-wide flex items-center gap-1.5">
+            🔔 Important Notices
+            <span className="text-[9px] bg-gold-500/20 text-gold-300 px-1.5 py-0.5 rounded-full animate-pulse border border-gold-400/30">
+              {notices.length} New
             </span>
           </h3>
-          <span className="ml-auto text-[10px] text-gold-300 font-medium bg-gold-500/20 px-2.5 py-0.5 rounded-full animate-pulse border border-gold-400/30">
+          <span className="ml-auto text-[9px] text-gold-300 font-medium bg-gold-500/20 px-2 py-0.5 rounded-full animate-pulse border border-gold-400/30">
             ⚡ Urgent
           </span>
         </div>
 
+<<<<<<< HEAD
         {/* Main Content */}
         <div className="flex-1 flex flex-col p-4 space-y-3 bg-gradient-to-b from-maroon-50/30 to-white">
           {/* Notice Badge */}
@@ -103,42 +195,135 @@ const CircularsPanel = () => {
             <button
               onClick={handleEnquireNow}
               className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2 group"
+=======
+        {/* ---------------- Notice List (scrollable) ---------------- */}
+        <div className="circular-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-2.5 bg-gradient-to-b from-maroon-50/30 to-white">
+          {notices.map((notice) => (
+            <motion.div
+              key={notice.id}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: notice.isNew ? 0 : 0.1 }}
+              className={`relative overflow-hidden rounded-xl border-2 shadow-sm hover:shadow-lg transition-shadow duration-300 ${
+                notice.theme === 'gold'
+                  ? 'border-gold-300 bg-gradient-to-br from-gold-50 via-white to-maroon-50'
+                  : 'border-maroon-200 bg-white'
+              }`}
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
             >
-              <Phone size={18} className="text-gold-400" />
-              Enquire Now
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+              {/* Decorative glow (only for the brand-new notice) */}
+              {notice.isNew && (
+                <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-gold-300/40 blur-2xl" />
+              )}
 
-            {/* View Details & Download */}
-            <div className="flex gap-2">
-              <button
-                onClick={handleCircularClick}
-                className="flex-1 py-2.5 bg-maroon-50 hover:bg-maroon-100 text-maroon-800 font-medium rounded-lg transition-colors text-sm border border-maroon-200"
-              >
-                View Details
-              </button>
-              <button
-                onClick={handleDownloadPDF}
-                className="flex-1 py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-1"
-              >
-                <Download size={14} />
-                Download PDF
-              </button>
-            </div>
-          </div>
+              {/* Top accent bar */}
+              <div
+                className={`h-1 w-full ${
+                  notice.theme === 'gold'
+                    ? 'bg-gradient-to-r from-gold-400 via-maroon-500 to-gold-400'
+                    : 'bg-gradient-to-r from-maroon-700 to-maroon-500'
+                }`}
+              />
+
+              <div className="relative p-3 space-y-2">
+                {/* ---- Badges ---- */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span
+                    className={`px-2 py-0.5 text-[9px] font-bold rounded-full border ${
+                      notice.theme === 'gold'
+                        ? 'bg-gold-100 text-maroon-800 border-gold-300 animate-pulse'
+                        : 'bg-maroon-100 text-maroon-800 border-maroon-200'
+                    }`}
+                  >
+                    {notice.badgeIcon} {notice.badge}
+                  </span>
+
+                  <span className="px-2 py-0.5 bg-white text-maroon-800 text-[9px] font-bold rounded-full border border-maroon-200">
+                    {notice.session}
+                  </span>
+
+                  {notice.isNew && (
+                    <span className="ml-auto flex items-center gap-1 text-[9px] font-extrabold text-gold-600 tracking-wide">
+                      <Sparkles size={10} className="animate-pulse" />
+                      NEW
+                    </span>
+                  )}
+                </div>
+
+                {/* ---- Title ---- */}
+                <div>
+                  <h4 className="text-[12px] font-bold text-maroon-900 leading-snug">
+                    {notice.title}
+                  </h4>
+                  <p className="text-[10px] font-semibold text-gold-600 mt-0.5">
+                    {notice.subtitle}
+                  </p>
+                </div>
+
+                {/* ---- Message Box ---- */}
+                <div
+                  className={`rounded-lg p-2.5 border ${
+                    notice.theme === 'gold'
+                      ? 'bg-white/85 border-gold-200 shadow-inner'
+                      : 'bg-maroon-50/70 border-maroon-100'
+                  }`}
+                >
+                  <p className="text-[11px] font-semibold text-maroon-900 leading-relaxed text-center">
+                    {renderMessage(notice)}
+                  </p>
+                </div>
+
+                {/* ---- Meta ---- */}
+                <div className="flex items-center gap-2.5 text-[10px] text-maroon-600 font-medium">
+                  <span className="flex items-center gap-1">
+                    <Calendar size={11} className="text-gold-500" />
+                    {formatDateOnly(notice.date)}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock size={11} className="text-gold-500" />
+                    {notice.time ? notice.time : 'To be announced'}
+                  </span>
+                </div>
+
+                {/* ---- Actions ---- */}
+                <div className="flex gap-2 pt-0.5">
+                  <button
+                    onClick={() => openModal(notice)}
+                    className={`flex-1 py-1.5 text-[10px] font-semibold rounded-lg transition-colors border ${
+                      notice.theme === 'gold'
+                        ? 'bg-white hover:bg-gold-50 text-maroon-800 border-gold-300'
+                        : 'bg-maroon-50 hover:bg-maroon-100 text-maroon-800 border-maroon-200'
+                    }`}
+                  >
+                    View Details
+                  </button>
+
+                  {notice.pdf && (
+                    <button
+                      onClick={() => handleDownloadPDF(notice.pdf)}
+                      className="flex-1 py-1.5 bg-maroon-700 hover:bg-maroon-800 text-white text-[10px] font-semibold rounded-lg transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Download size={11} />
+                      Download PDF
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Footer */}
-        <div className="bg-maroon-50 px-4 py-2 border-t border-maroon-100 flex-shrink-0">
-          <p className="text-[10px] text-maroon-600 font-medium tracking-wide text-center">
+        {/* ---------------- Footer ---------------- */}
+        <div className="bg-maroon-50 px-3 py-1.5 border-t border-maroon-100 flex-shrink-0">
+          <p className="text-[9px] text-maroon-600 font-medium tracking-wide text-center">
             📍 {schoolInfo.shortName || schoolInfo.name} - {schoolInfo.branch}
           </p>
         </div>
       </div>
 
-      {/* Modal - Full Details */}
+      {/* ---------------- Modal - Full Details ---------------- */}
       <AnimatePresence>
-        {isModalOpen && (
+        {isModalOpen && activeNotice && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -158,7 +343,11 @@ const CircularsPanel = () => {
               <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
                 <div className="flex items-center gap-2">
                   <Bell size={20} className="text-gold-400" />
+<<<<<<< HEAD
                   <h3 className="text-white font-bold text-lg">📢 KG Admission Notice</h3>
+=======
+                  <h3 className="text-white font-bold text-lg">📢 Notice Details</h3>
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                 </div>
                 <button
                   onClick={closeModal}
@@ -170,21 +359,46 @@ const CircularsPanel = () => {
 
               {/* Modal Body */}
               <div className="p-6 space-y-4">
+<<<<<<< HEAD
                 <div className="flex items-center gap-2">
                   <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
                     🔥 KG ADMISSION 2027-28
                   </span>
                   <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
                     Interaction
+=======
+                {/* Badges */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span
+                    className={`px-3 py-1 text-xs font-bold rounded-full border ${
+                      activeNotice.theme === 'gold'
+                        ? 'bg-gold-100 text-maroon-800 border-gold-300 animate-pulse'
+                        : 'bg-maroon-100 text-maroon-800 border-maroon-200'
+                    }`}
+                  >
+                    {activeNotice.badgeIcon} {activeNotice.badge}
+                  </span>
+                  <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
+                    {activeNotice.session}
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                   </span>
                 </div>
 
-                <h4 className="text-xl font-bold text-maroon-900">{circular.title}</h4>
-                <p className="text-sm font-semibold text-gold-600">{circular.subtitle}</p>
+                {/* Title */}
+                <div>
+                  <h4 className="text-xl font-bold text-maroon-900">
+                    {activeNotice.title}
+                  </h4>
+                  <p className="text-sm font-semibold text-gold-600 mt-0.5">
+                    {activeNotice.subtitle}
+                  </p>
+                </div>
 
+                {/* Date & Time */}
                 <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={16} className="text-gold-500" />
+<<<<<<< HEAD
                     {formatDateOnly(circular.date)}
                   </span>
                 </div>
@@ -193,29 +407,37 @@ const CircularsPanel = () => {
                   <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
                     <p className="text-xl md:text-2xl font-extrabold text-maroon-900 text-center leading-relaxed">
                       {circular.description}
+=======
+                    {formatDateOnly(activeNotice.date)}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={16} className="text-gold-500" />
+                    {activeNotice.time || 'To be announced'}
+                  </span>
+                </div>
+
+                {/* Highlighted Message */}
+                <div className="border-t border-maroon-100 pt-4">
+                  <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
+                    <p className="text-lg md:text-xl font-extrabold text-maroon-900 text-center leading-relaxed">
+                      {renderMessage(activeNotice)}
+>>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-2 pt-2">
-                  <button
-                    onClick={handleEnquireNow}
-                    className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Phone size={18} className="text-gold-400" />
-                    Enquire Now
-                  </button>
-
-                  {circular.pdf && (
+                {/* Actions */}
+                {activeNotice.pdf && (
+                  <div className="pt-2">
                     <button
-                      onClick={handleDownloadPDF}
+                      onClick={() => handleDownloadPDF(activeNotice.pdf)}
                       className="w-full py-2.5 bg-maroon-700 hover:bg-maroon-800 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       <Download size={16} />
                       Download Interaction Notice (PDF)
                     </button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Modal Footer */}
