@@ -14,23 +14,26 @@ const CircularsPanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeNotice, setActiveNotice] = useState(null)
 
-<<<<<<< HEAD
-  // Static circular data - Interaction Notice
-  const circular = {
-    id: 1,
-    title: '📢 KG ADMISSION 2027-2028',
-    subtitle: 'Interaction Date & Time Notice',
-    description: `Kindly download the Interaction Date & Time for KG Admission 2027-2028.`,
-    date: '2026-09-19',
-    time: '10:00:00',
-    // Correct path to the PDF inside public/management/
-    pdf: '/management/kgAdmission.pdf'
-  }
-=======
   /* ------------------------------------------------------------------
    *  NOTICES  (newest first)
    * ------------------------------------------------------------------ */
   const notices = [
+    {
+      id: 3,
+      isNew: true,
+      theme: 'gold',
+      badge: 'NEW ANNOUNCEMENT',
+      badgeIcon: '✨',
+      title: '📅 KG Admission 2027-28',
+      subtitle: 'Interaction Date & Time',
+      message:
+        'Kindly download the Interaction Date & Time for KG Admission 2027-2028.',
+      highlight: null,
+      date: '2026-09-19',
+      time: '10:00:00',
+      session: '2027-28',
+      pdf: '/management/kgAdmission.pdf',
+    },
     {
       id: 2,
       isNew: true,
@@ -64,7 +67,6 @@ const CircularsPanel = () => {
       pdf: '/wp-content/uploads/2026/05/AdmissionNotice.pdf',
     },
   ]
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
 
   /* ------------------------------------------------------------------
    *  HELPERS
@@ -98,29 +100,10 @@ const CircularsPanel = () => {
     setIsModalOpen(true)
   }
 
-<<<<<<< HEAD
-  const closeModal = () => {
-    setIsModalOpen(false)
-  }
-
-  // Force download of the PDF
-  const handleDownloadPDF = () => {
-    const link = document.createElement('a')
-    link.href = circular.pdf
-    link.download = 'kgAdmission.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const handleEnquireNow = () => {
-    window.location.href = '/contact-us'
-=======
   const closeModal = () => setIsModalOpen(false)
 
   const handleDownloadPDF = (pdf) => {
     if (pdf) window.open(pdf, '_blank')
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
   }
 
   /* ------------------------------------------------------------------
@@ -159,43 +142,6 @@ const CircularsPanel = () => {
           </span>
         </div>
 
-<<<<<<< HEAD
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col p-4 space-y-3 bg-gradient-to-b from-maroon-50/30 to-white">
-          {/* Notice Badge */}
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-              🔥 KG ADMISSION 2027-28
-            </span>
-            <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-              Interaction
-            </span>
-          </div>
-
-          {/* Main Message - Big, Bold, Center */}
-          <div className="flex-1 flex flex-col items-center justify-center py-4 px-2">
-            <div className="text-center space-y-3 w-full">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-gold-400 via-maroon-500 to-gold-400 rounded-lg blur opacity-30 animate-pulse"></div>
-                <p className="relative text-xl md:text-2xl font-extrabold text-maroon-900 leading-tight tracking-wide bg-white/80 px-4 py-3 rounded-lg border-2 border-gold-300 shadow-lg">
-                  Kindly download the Interaction Date &amp; Time for KG Admission 2027-2028.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-center gap-2 text-xs text-maroon-600 font-medium">
-                <Clock size={14} className="text-gold-500" />
-                <span>📅 Posted on: {formatDateOnly(circular.date)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Action Buttons - Full width */}
-          <div className="space-y-2 mt-auto">
-            {/* Enquire Now Button - Primary CTA */}
-            <button
-              onClick={handleEnquireNow}
-              className="w-full py-3 bg-gradient-to-r from-maroon-700 to-maroon-800 hover:from-maroon-800 hover:to-maroon-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-maroon-500/30 transition-all duration-300 flex items-center justify-center gap-2 group"
-=======
         {/* ---------------- Notice List (scrollable) ---------------- */}
         <div className="circular-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-2.5 bg-gradient-to-b from-maroon-50/30 to-white">
           {notices.map((notice) => (
@@ -209,7 +155,6 @@ const CircularsPanel = () => {
                   ? 'border-gold-300 bg-gradient-to-br from-gold-50 via-white to-maroon-50'
                   : 'border-maroon-200 bg-white'
               }`}
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
             >
               {/* Decorative glow (only for the brand-new notice) */}
               {notice.isNew && (
@@ -343,11 +288,7 @@ const CircularsPanel = () => {
               <div className="sticky top-0 bg-gradient-to-r from-maroon-800 to-maroon-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
                 <div className="flex items-center gap-2">
                   <Bell size={20} className="text-gold-400" />
-<<<<<<< HEAD
-                  <h3 className="text-white font-bold text-lg">📢 KG Admission Notice</h3>
-=======
                   <h3 className="text-white font-bold text-lg">📢 Notice Details</h3>
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                 </div>
                 <button
                   onClick={closeModal}
@@ -359,14 +300,6 @@ const CircularsPanel = () => {
 
               {/* Modal Body */}
               <div className="p-6 space-y-4">
-<<<<<<< HEAD
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-maroon-100 text-maroon-800 text-xs font-bold rounded-full animate-pulse border border-maroon-200">
-                    🔥 KG ADMISSION 2027-28
-                  </span>
-                  <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
-                    Interaction
-=======
                 {/* Badges */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
@@ -380,7 +313,6 @@ const CircularsPanel = () => {
                   </span>
                   <span className="px-3 py-1 bg-gold-100 text-maroon-800 text-xs font-bold rounded-full border border-gold-200">
                     {activeNotice.session}
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                   </span>
                 </div>
 
@@ -398,16 +330,6 @@ const CircularsPanel = () => {
                 <div className="flex items-center gap-4 text-sm text-gray-500 bg-maroon-50 p-3 rounded-lg border border-maroon-100">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={16} className="text-gold-500" />
-<<<<<<< HEAD
-                    {formatDateOnly(circular.date)}
-                  </span>
-                </div>
-
-                <div className="border-t border-maroon-100 pt-4">
-                  <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
-                    <p className="text-xl md:text-2xl font-extrabold text-maroon-900 text-center leading-relaxed">
-                      {circular.description}
-=======
                     {formatDateOnly(activeNotice.date)}
                   </span>
                   <span className="flex items-center gap-1.5">
@@ -421,7 +343,6 @@ const CircularsPanel = () => {
                   <div className="bg-gradient-to-r from-gold-50 to-maroon-50 p-6 rounded-xl border-2 border-gold-300 shadow-inner">
                     <p className="text-lg md:text-xl font-extrabold text-maroon-900 text-center leading-relaxed">
                       {renderMessage(activeNotice)}
->>>>>>> f881e154d6b32081b6813b14a14119348ef51783
                     </p>
                   </div>
                 </div>
